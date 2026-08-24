@@ -1,295 +1,44 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="sv">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>iSaawa - Officiell hemsida</title>
-	<style>
-		:root {
-			color-scheme: dark;
-			font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-		}
-
-		* {
-			box-sizing: border-box;
-		}
-
-		body {
-			min-height: 100vh;
-			margin: 0;
-			display: block;
-			padding: 1.5rem;
-			color: #f7f3ff;
-			text-align: center;
-			overflow-x: hidden;
-			overflow-y: auto;
-			background:
-				radial-gradient(ellipse 30% 50% at 50% -8%, rgba(255, 226, 139, .32), transparent 70%),
-				radial-gradient(circle at 10% 22%, rgba(123, 26, 255, .12), transparent 20%),
-				radial-gradient(circle at 90% 78%, rgba(158, 32, 255, .1), transparent 22%),
-				#000;
-		}
-
-		body::before,
-		body::after {
-			content: "";
-			position: fixed;
-			z-index: 0;
-			width: 2px;
-			height: 72vh;
-			background: #d4a842;
-			filter: drop-shadow(0 0 4px #fff0ad) drop-shadow(0 0 14px #d4a842) drop-shadow(0 0 30px rgba(218, 174, 76, .72));
-			clip-path: polygon(48% 0, 62% 13%, 53% 25%, 78% 38%, 57% 48%, 72% 62%, 49% 72%, 63% 86%, 45% 100%, 41% 84%, 26% 72%, 40% 60%, 20% 48%, 42% 36%, 29% 22%, 44% 12%);
-			pointer-events: none;
-		}
-
-		body::before {
-			top: 5vh;
-			left: 14%;
-			transform: rotate(-18deg) scaleX(1.8);
-			box-shadow: 8vw 16vh 0 #d4a842, -4vw 38vh 0 #98651a;
-		}
-
-		body::after {
-			top: 18vh;
-			right: 14%;
-			height: 64vh;
-			transform: rotate(21deg) scaleX(1.6);
-			background: #d4a842;
-			filter: drop-shadow(0 0 4px #fff0ad) drop-shadow(0 0 14px #d4a842) drop-shadow(0 0 30px rgba(218, 174, 76, .72));
-			box-shadow: -8vw -12vh 0 #d4a842, 5vw 24vh 0 #98651a;
-		}
-
-		main {
-			width: min(100%, 720px);
-			padding: clamp(3.5rem, 10vw, 7rem) 2rem;
-			border: 1px solid rgba(218, 174, 76, .34);
-			border-radius: 2rem;
-			background: linear-gradient(145deg, rgba(18, 14, 10, .94), rgba(3, 3, 3, .96));
-			box-shadow: 0 1.5rem 5rem rgba(0, 0, 0, .55), 0 0 4rem rgba(108, 55, 220, .2), 0 0 1.5rem rgba(218, 174, 76, .08), inset 0 1px rgba(255, 235, 174, .14);
-			backdrop-filter: blur(14px);
-			position: relative;
-			z-index: 1;
-		}
-
-		main::after {
-			content: "";
-			position: absolute;
-			z-index: 0;
-			inset: -18rem 12% 42% 12%;
-			background: linear-gradient(180deg, rgba(255, 223, 125, .72), rgba(218, 174, 76, .2) 48%, transparent 100%);
-			clip-path: polygon(43% 0, 57% 0, 82% 100%, 18% 100%);
-			filter: blur(1.5rem);
-			pointer-events: none;
-		}
-
-		.microphone {
-			position: relative;
-			z-index: 2;
-			display: block;
-			width: 3.4rem;
-			height: 3.4rem;
-			margin: 0 auto 1.1rem;
-			filter: drop-shadow(0 0 7px rgba(218, 174, 76, .42));
-		}
-
-		main::before {
-			content: "";
-			position: absolute;
-			inset: .7rem;
-			border: 1px solid rgba(218, 174, 76, .12);
-			border-radius: 1.45rem;
-			pointer-events: none;
-		}
-
-		h1 {
-			position: relative;
-			z-index: 2;
-			width: 100%;
-			margin: 0;
-			font-family: Georgia, "Times New Roman", serif;
-			font-size: clamp(2.75rem, 13vw, 7rem);
-			font-weight: 700;
-			font-style: normal;
-			letter-spacing: .01em;
-			line-height: .95;
-			white-space: nowrap;
-			-webkit-text-stroke: .055em #4b2d08;
-			paint-order: stroke fill;
-			background: linear-gradient(180deg, #fff7ca 0%, #fff0a0 13%, #d6a63e 31%, #70420a 48%, #b77a18 58%, #f8d875 72%, #fff4af 83%, #85500d 100%);
-			-webkit-background-clip: text;
-			background-clip: text;
-			color: transparent;
-			text-shadow: .035em .045em 0 #3b2206, .07em .085em 0 #1d1003, .105em .12em .08em rgba(0, 0, 0, .85), 0 0 .12em rgba(255, 225, 117, .9), 0 0 .5em rgba(218, 174, 76, .35);
-		}
-
-		p {
-			position: relative;
-			z-index: 2;
-			width: 100%;
-			max-width: 34rem;
-			margin: 1.5rem auto 0;
-			color: #d0cbe0;
-			font-size: clamp(1rem, 2vw, 1.2rem);
-			line-height: 1.7;
-			letter-spacing: .02em;
-		}
-
-		.hero-shell {
-			width: 100%;
-			min-height: calc(100vh - 3rem);
-			display: grid;
-			place-items: center;
-		}
-
-		.site-sections {
-			position: relative;
-			z-index: 1;
-			width: min(100%, 920px);
-			margin: 0 auto;
-			padding: 4rem 0 2rem;
-			display: grid;
-			gap: 2rem;
-			text-align: left;
-		}
-
-		.site-section {
-			padding: clamp(1.5rem, 4vw, 2.5rem);
-			border: 1px solid rgba(218, 174, 76, .3);
-			border-radius: 1.25rem;
-			background: linear-gradient(145deg, rgba(18, 14, 10, .94), rgba(3, 3, 3, .96));
-			box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, .4), inset 0 1px rgba(255, 235, 174, .1);
-		}
-
-		.section-heading {
-			margin: 0 0 1.5rem;
-			color: #f1d277;
-			font-family: Georgia, "Times New Roman", serif;
-			font-size: clamp(1.7rem, 4vw, 2.5rem);
-			font-weight: 700;
-			letter-spacing: .02em;
-			text-shadow: 0 0 .8rem rgba(218, 174, 76, .28);
-		}
-
-		.track-grid {
-			display: grid;
-			grid-template-columns: repeat(3, 1fr);
-			gap: 1rem;
-		}
-
-		.track-card {
-			min-height: 11rem;
-			padding: 1.25rem;
-			display: flex;
-			flex-direction: column;
-			justify-content: space-between;
-			border: 1px solid rgba(218, 174, 76, .22);
-			border-radius: .7rem;
-			background: linear-gradient(155deg, rgba(49, 36, 15, .7), rgba(8, 7, 5, .92));
-			box-shadow: inset 0 1px rgba(255, 240, 173, .08);
-		}
-
-		.track-card h3 {
-			margin: 0;
-			color: #fff0ad;
-			font-family: Georgia, "Times New Roman", serif;
-			font-size: 1.25rem;
-		}
-
-		.track-card p,
-		.about-copy {
-			margin: .6rem 0 0;
-			color: #d0cbe0;
-			font-size: 1rem;
-			line-height: 1.65;
-		}
-
-		.gold-button {
-			display: inline-block;
-			align-self: flex-start;
-			margin-top: 1.25rem;
-			padding: .65rem 1rem;
-			border: 1px solid #c99b36;
-			border-radius: .35rem;
-			color: #fff0ad;
-			background: linear-gradient(180deg, #765016, #3b2408);
-			font-weight: 700;
-			text-decoration: none;
-			box-shadow: 0 0 .8rem rgba(218, 174, 76, .14), inset 0 1px rgba(255, 240, 173, .2);
-		}
-
-		.social-links {
-			display: flex;
-			flex-wrap: wrap;
-			gap: .75rem;
-		}
-
-		.social-links .gold-button {
-			margin-top: 0;
-		}
-
-		@media (max-width: 620px) {
-			.site-sections {
-				padding-top: 2.5rem;
-			}
-
-			.track-grid {
-				grid-template-columns: 1fr;
-			}
-		}
-	</style>
+	<link rel="stylesheet" href="styles.css">
 </head>
 <body>
+	<nav class="language-switcher" aria-label="Välj språk">
+		<a class="language-button active" href="index.html" aria-label="Svenska, aktivt språk" aria-current="page"><span>SWE</span><span aria-hidden="true">🇸🇪</span></a>
+		<a class="language-button" href="index-en.html" aria-label="English"><span>ENG</span><span aria-hidden="true">🇬🇧</span></a>
+	</nav>
+
 	<div class="hero-shell">
 		<main>
-			<svg class="microphone" viewBox="0 0 64 64" role="img" aria-label="Mikrofon">
-				<defs>
-					<linearGradient id="gold-microphone" x1="0" y1="0" x2="1" y2="1">
-						<stop offset="0" stop-color="#fff0ad" />
-						<stop offset=".45" stop-color="#d4a842" />
-						<stop offset="1" stop-color="#98651a" />
-					</linearGradient>
-				</defs>
-				<rect x="23" y="7" width="18" height="34" rx="9" fill="url(#gold-microphone)" stroke="#5e390a" stroke-width="1.5" />
-				<path d="M28 12v18" stroke="#fff3b0" stroke-width="2" stroke-linecap="round" opacity=".72" />
-				<path d="M15 30v3c0 10 7.6 18 17 18s17-8 17-18v-3M32 51v8M23 59h18" fill="none" stroke="url(#gold-microphone)" stroke-width="4" stroke-linecap="round" />
-			</svg>
-			<h1>iSaawa</h1>
-			<p>Musik med känsla, kraft och berättelser från livet.</p>
+			<img src="isaawa-huvudlogga.jpeg" alt="iSaawa – musik och IT/spelutveckling" class="hero-logo">
+			<p class="hero-kicker">MUSIK • IT • SPELUTVECKLING</p>
+			<p class="hero-description">
+				Två kreativa spår, skapade av en far och son. Musik, IT, spelutveckling och kodprojekt förenas under iSaawa.
+			</p>
+			<div class="hero-actions">
+				<a href="musik.html" class="hero-button">Utforska musiken</a>
+				<a href="it-projekt.html" class="hero-button">Se våra IT- och spelprojekt</a>
+			</div>
 		</main>
 	</div>
 
 	<div class="site-sections">
-		<section class="site-section" aria-labelledby="tracks-heading">
-			<h2 class="section-heading" id="tracks-heading">Mina låtar</h2>
-			<div class="track-grid">
-				<article class="track-card">
-					<h3>Marie, du är mitt liv</h3>
-					<a class="gold-button" href="https://suno.com/s/RdbQhg8PwoIfoeN1" target="_blank" rel="noopener noreferrer">Lyssna</a>
-				</article>
-				<article class="track-card">
-					<h3>Valet</h3>
-					<a class="gold-button" href="https://suno.com/s/S7fRGnyrlIV3Q7uO" target="_blank" rel="noopener noreferrer">Lyssna</a>
-				</article>
-				<article class="track-card">
-					<h3>När jag gör allt fel</h3>
-					<a class="gold-button" href="https://suno.com/s/NqK2eyAbBx9RN2Ed" target="_blank" rel="noopener noreferrer">Lyssna</a>
-				</article>
-			</div>
-		</section>
-
 		<section class="site-section" aria-labelledby="about-heading">
-			<h2 class="section-heading" id="about-heading">Om iSaawa</h2>
-			<p class="about-copy">iSaawa skapar musik med känsla, kraft och berättelser hämtade från livet. Musiken rör sig mellan pop, rock och rap och handlar om kärlek, familj, drömmar och de stunder då livet inte blir som man tänkt sig. Varje låt är skapad för att beröra, väcka tankar och få lyssnaren att känna igen sig.</p>
+			<h2 class="section-heading" id="about-heading">Om oss</h2>
+			<p class="about-copy">Vi är Niclas och Casper – en pappa i 40-årsåldern och hans son i 12-årsåldern. Tillsammans driver vi iSaawa, där musik möter IT, kodning och spelutveckling. Niclas skapar musiken, och tillsammans utvecklar vi digitala idéer och projekt. Det som började som gemensamma intressen har blivit en kreativ satsning där vi lär oss, bygger och skapar sida vid sida.</p>
 		</section>
 
 		<section class="site-section" aria-labelledby="follow-heading">
 			<h2 class="section-heading" id="follow-heading">Följ iSaawa</h2>
 			<nav class="social-links" aria-label="Följ iSaawa">
-				<a class="gold-button" href="#">Suno</a>
-				<a class="gold-button" href="#">YouTube</a>
-				<a class="gold-button" href="#">Instagram</a>
-				<a class="gold-button" href="#">TikTok</a>
+				<a class="hero-button social-button" href="#">Suno</a>
+				<a class="hero-button social-button" href="#">YouTube</a>
+				<a class="hero-button social-button" href="#">Instagram</a>
+				<a class="hero-button social-button" href="#">TikTok</a>
 			</nav>
 		</section>
 	</div>
