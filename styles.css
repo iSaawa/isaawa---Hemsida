@@ -150,6 +150,20 @@ main::after {
 	text-decoration: none;
 }
 
+.social-button-disabled {
+	opacity: .58;
+	cursor: default;
+}
+
+.social-status {
+	display: block;
+	margin-top: .25rem;
+	color: #d4a842;
+	font-size: .65rem;
+	font-weight: 600;
+	letter-spacing: .04em;
+}
+
 main::before {
 	content: "";
 	position: absolute;
