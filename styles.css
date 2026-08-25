@@ -452,8 +452,26 @@ p {
 		align-items: stretch;
 	}
 
+	.hero-button {
+		max-width: 100%;
+		text-align: center;
+		white-space: normal;
+		overflow-wrap: anywhere;
+	}
+
 	.site-sections {
 		padding-top: 2.5rem;
+		min-width: 0;
+	}
+
+	.site-section,
+	.project-card {
+		min-width: 0;
+	}
+
+	.section-heading {
+		white-space: normal;
+		overflow-wrap: anywhere;
 	}
 
 	.site-footer {
@@ -466,5 +484,18 @@ p {
 
 	.updates-grid {
 		grid-template-columns: 1fr;
+	}
+
+	.social-links {
+		justify-content: center;
+	}
+
+	.social-button-disabled {
+		text-align: center;
+	}
+
+	.footer-links a {
+		max-width: 100%;
+		text-align: center;
 	}
 }
