@@ -18,14 +18,14 @@ body {
 	margin: 0;
 	display: block;
 	padding: 1.5rem;
-	color: #f7f3ff;
+	color: #f2f4f6;
 	text-align: center;
 	overflow-x: hidden;
 	overflow-y: auto;
 	background:
 		radial-gradient(ellipse 30% 50% at 50% -8%, rgba(255, 226, 139, .32), transparent 70%),
-		radial-gradient(circle at 10% 22%, rgba(123, 26, 255, .12), transparent 20%),
-		radial-gradient(circle at 90% 78%, rgba(158, 32, 255, .1), transparent 22%),
+		radial-gradient(circle at 10% 22%, rgba(164, 172, 180, .1), transparent 20%),
+		radial-gradient(circle at 90% 78%, rgba(112, 120, 128, .08), transparent 22%),
 		#000;
 }
 
@@ -65,7 +65,7 @@ main {
 	border: 1px solid rgba(218, 174, 76, .34);
 	border-radius: 2rem;
 	background: linear-gradient(145deg, rgba(18, 14, 10, .94), rgba(3, 3, 3, .96));
-	box-shadow: 0 1.5rem 5rem rgba(0, 0, 0, .55), 0 0 4rem rgba(108, 55, 220, .2), 0 0 1.5rem rgba(218, 174, 76, .08), inset 0 1px rgba(255, 235, 174, .14);
+	box-shadow: 0 1.5rem 5rem rgba(0, 0, 0, .55), 0 0 4rem rgba(164, 172, 180, .16), 0 0 1.5rem rgba(218, 174, 76, .08), inset 0 1px rgba(255, 235, 174, .14);
 	backdrop-filter: blur(14px);
 	position: relative;
 	z-index: 1;
@@ -116,7 +116,7 @@ main::after {
 	padding: .75rem 1.2rem;
 	border: 1px solid #d4a842;
 	border-radius: .5rem;
-	color: #f7f3ff;
+	color: #f2f4f6;
 	background: linear-gradient(135deg, #7650a8, #3d255f);
 	text-decoration: none;
 	font-weight: 700;
@@ -242,7 +242,7 @@ p {
 	padding: 1.25rem;
 	border: 1px solid rgba(218, 174, 76, .55);
 	border-radius: .7rem;
-	background: linear-gradient(155deg, rgba(49, 36, 15, .7), rgba(35, 20, 55, .8));
+	background: linear-gradient(155deg, rgba(49, 44, 34, .7), rgba(42, 47, 53, .86));
 	box-shadow: 0 0 1rem rgba(218, 174, 76, .14), inset 0 1px rgba(255, 240, 173, .08);
 }
 
@@ -265,7 +265,7 @@ p {
 	padding: 1.5rem;
 	border: 1px solid #d4a842;
 	border-radius: .7rem;
-	background: linear-gradient(145deg, #21182f, #0b0910);
+	background: linear-gradient(145deg, #30353a, #0b0d0f);
 	box-shadow: 0 0 1.2rem rgba(218, 174, 76, .2), inset 0 1px rgba(255, 240, 173, .12);
 	text-align: center;
 }
@@ -368,7 +368,7 @@ p {
 	padding: 1.5rem;
 	border: 1px solid rgba(218, 174, 76, .35);
 	border-radius: 1rem;
-	background: linear-gradient(145deg, rgba(18, 14, 10, .94), rgba(35, 20, 55, .78));
+	background: linear-gradient(145deg, rgba(18, 14, 10, .94), rgba(42, 47, 53, .82));
 	box-shadow: 0 0 1.2rem rgba(218, 174, 76, .12), inset 0 1px rgba(255, 235, 174, .1);
 	text-align: center;
 }
@@ -415,7 +415,7 @@ p {
 	padding: .3rem .45rem;
 	border: 1px solid #d4a842;
 	border-radius: .4rem;
-	color: #f7f3ff;
+	color: #f2f4f6;
 	background: linear-gradient(135deg, #7650a8, #3d255f);
 	font-size: .65rem;
 	font-weight: 700;
