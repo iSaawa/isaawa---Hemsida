@@ -40,9 +40,23 @@
 				<article class="track-card">
 					<h3>Marie, du är mitt liv</h3>
 					<p>In production: This song is still being refined for the final release. You can already listen to an early preview.</p>
-					<audio controls>
-						<source src="audio/Marie, du är mitt liv.mp3" type="audio/mpeg">
-					</audio>
+					<div class="custom-audio-player">
+						<audio>
+							<source src="audio/Marie, du är mitt liv.mp3" type="audio/mpeg">
+						</audio>
+					<div class="player-main-controls">
+						<button class="player-play-btn" title="Play/Pause">▶</button>
+						<span class="player-time">0:00 / 0:00</span>
+						<span class="player-volume-icon">🔊</span>
+						<input type="range" class="player-volume-control" min="0" max="100" value="100">
+					</div>
+					<div class="player-progress-container">
+						<div class="player-progress-bar">
+							<div class="player-progress-fill"></div>
+							<input type="range" class="player-seekbar" min="0" max="100" value="0">
+							</div>
+						</div>
+					</div>
 				</article>
 				<article class="track-card">
 					<h3>Vi ska ta oss dit</h3>
@@ -51,17 +65,44 @@
 				<article class="track-card">
 					<h3>När jag gör allt fel</h3>
 					<img src="audio/nar-jag-gor-allt-fel.jpeg" alt="När jag gör allt fel" style="display:block; width:100%; height:160px; object-fit:cover; border-radius:0.7rem; border:1px solid rgba(212,168,66,.65); background:#050505;">
-					<audio controls>
-						<source src="audio/När jag gör allt fel.mp3" type="audio/mpeg">
-					</audio>
+					<div class="custom-audio-player">
+						<audio>
+							<source src="audio/När jag gör allt fel.mp3" type="audio/mpeg">
+						</audio>
+					<div class="player-main-controls">
+						<button class="player-play-btn" title="Play/Pause">▶</button>
+						<span class="player-time">0:00 / 0:00</span>
+						<span class="player-volume-icon">🔊</span>
+						<input type="range" class="player-volume-control" min="0" max="100" value="100">
+					</div>
+					<div class="player-progress-container">
+						<div class="player-progress-bar">
+							<div class="player-progress-fill"></div>
+							<input type="range" class="player-seekbar" min="0" max="100" value="0">
+							</div>
+						</div>
+					</div>
 				</article>
 				<article class="track-card">
 					<h3>Så nära</h3>
 					<img src="audio/sa-nara-bild.PNG" alt="Så nära" style="display:block; width:100%; height:160px; object-fit:cover; border-radius:0.7rem; border:1px solid rgba(212,168,66,.65); background:#050505;">
-<audio controls>
-				<source src="audio/sa-nara.mp3" type="audio/mpeg">
-
-</audio>
+					<div class="custom-audio-player">
+						<audio>
+							<source src="audio/sa-nara.mp3" type="audio/mpeg">
+						</audio>
+					<div class="player-main-controls">
+						<button class="player-play-btn" title="Play/Pause">▶</button>
+						<span class="player-time">0:00 / 0:00</span>
+						<span class="player-volume-icon">🔊</span>
+						<input type="range" class="player-volume-control" min="0" max="100" value="100">
+					</div>
+					<div class="player-progress-container">
+						<div class="player-progress-bar">
+							<div class="player-progress-fill"></div>
+							<input type="range" class="player-seekbar" min="0" max="100" value="0">
+							</div>
+						</div>
+					</div>
 				</article>
 			</div>
 		</section>
@@ -78,5 +119,79 @@
 			<a href="#top">Back to top</a>
 		</nav>
 	</footer>
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			const players = document.querySelectorAll('.custom-audio-player');
+			
+			players.forEach(player => {
+				const audio = player.querySelector('audio');
+				const playBtn = player.querySelector('.player-play-btn');
+				const seekbar = player.querySelector('.player-seekbar');
+				const progressFill = player.querySelector('.player-progress-fill');
+				const timeDisplay = player.querySelector('.player-time');
+				const volumeControl = player.querySelector('.player-volume-control');
+				const progressBar = player.querySelector('.player-progress-bar');
+				
+				// Format time display
+				function formatTime(seconds) {
+					if (!isFinite(seconds)) return '0:00';
+					const mins = Math.floor(seconds / 60);
+					const secs = Math.floor(seconds % 60);
+					return `${mins}:${secs.toString().padStart(2, '0')}`;
+				}
+				
+				// Play/Pause button
+				playBtn.addEventListener('click', () => {
+					if (audio.paused) {
+						audio.play();
+						playBtn.textContent = '⏸';
+					} else {
+						audio.pause();
+						playBtn.textContent = '▶';
+					}
+				});
+				
+				// Update progress when audio plays
+				audio.addEventListener('timeupdate', () => {
+					const progress = (audio.currentTime / audio.duration) * 100;
+					progressFill.style.width = progress + '%';
+					seekbar.value = progress;
+					timeDisplay.textContent = formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
+				});
+				
+				// When audio ends
+				audio.addEventListener('ended', () => {
+					playBtn.textContent = '▶';
+				});
+				
+				// Seeking via seekbar
+				seekbar.addEventListener('input', (e) => {
+					const progress = e.target.value;
+					audio.currentTime = (progress / 100) * audio.duration;
+				});
+				
+				// Click on progress bar to seek
+				progressBar.addEventListener('click', (e) => {
+					const rect = progressBar.getBoundingClientRect();
+					const x = e.clientX - rect.left;
+					const percentage = (x / rect.width) * 100;
+					audio.currentTime = (percentage / 100) * audio.duration;
+				});
+				
+				// Volume control
+				volumeControl.addEventListener('input', (e) => {
+					audio.volume = e.target.value / 100;
+				});
+				
+				// Load metadata to get duration
+				audio.addEventListener('loadedmetadata', () => {
+					timeDisplay.textContent = '0:00 / ' + formatTime(audio.duration);
+				});
+				
+				// Set initial volume
+				audio.volume = 1.0;
+			});
+		});
+	</script>
 </body>
 </html>
