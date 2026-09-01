@@ -225,11 +225,11 @@ p {
 }
 
 .site-section {
-	padding: clamp(1.5rem, 4vw, 2.5rem);
-	border: 1px solid rgba(218, 174, 76, .3);
-	border-radius: 1.25rem;
-	background: linear-gradient(145deg, rgba(18, 14, 10, .94), rgba(3, 3, 3, .96));
-	box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, .4), inset 0 1px rgba(255, 235, 174, .1);
+	padding: clamp(1.5rem, 4vw, 2.5rem) !important;
+	border: 1px solid rgba(212, 168, 66, .9) !important;
+	border-radius: 1.25rem !important;
+	background: #050505 !important;
+	box-shadow: 0 0 0 1px rgba(212, 168, 66, .18), 0 0 18px rgba(212, 168, 66, .14), inset 0 1px rgba(255, 235, 174, .08) !important;
 }
 
 .updates-grid {
@@ -303,52 +303,77 @@ p {
 	text-shadow: 0 0 .8rem rgba(218, 174, 76, .28);
 }
 
-.track-grid {
-	display: grid;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
-	gap: 1rem;
-	align-items: stretch;
+.site-section .track-grid {
+	display: grid !important;
+	grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+	gap: 1.1rem !important;
+	align-items: stretch !important;
+	margin-top: 1rem !important;
 }
 
-.track-card {
-	height: 100%;
-	min-height: 11rem;
-	padding: 1.25rem;
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-start;
-	gap: .75rem;
-	box-sizing: border-box;
-	width: 100%;
-	border: 1px solid rgba(218, 174, 76, .22);
-	border-radius: .7rem;
-	background: linear-gradient(155deg, rgba(49, 36, 15, .7), rgba(8, 7, 5, .92));
-	box-shadow: inset 0 1px rgba(255, 240, 173, .08);
+.site-section .track-card {
+	position: relative !important;
+	display: flex !important;
+	flex-direction: column !important;
+	justify-content: flex-start !important;
+	gap: .8rem !important;
+	width: 100% !important;
+	height: 100% !important;
+	min-height: 13rem !important;
+	padding: 1.25rem 1.15rem 1rem !important;
+	box-sizing: border-box !important;
+	border: 1px solid rgba(212, 168, 66, .9) !important;
+	border-radius: .9rem !important;
+	background: #050505 !important;
+	box-shadow: 0 0 0 1px rgba(206, 168, 90, .25), 0 0 14px rgba(205, 161, 78, .16), 0 0 26px rgba(116, 78, 167, .18), inset 0 1px rgba(255, 236, 170, .08) !important;
+	overflow: hidden !important;
 }
 
-.track-card > * {
-	width: 100%;
+.site-section .track-card::before {
+	content: "" !important;
+	position: absolute !important;
+	inset: auto 14% -1.3rem 14% !important;
+	height: 2rem !important;
+	border-radius: 50% !important;
+	background: radial-gradient(ellipse at center, rgba(133, 96, 187, .95) 0%, rgba(105, 69, 154, .7) 28%, rgba(105, 69, 154, .18) 56%, rgba(105, 69, 154, 0) 75%) !important;
+	filter: blur(12px) !important;
+	pointer-events: none !important;
 }
 
-.track-card h3 {
-	margin: 0;
-	color: #fff0ad;
-	font-family: Georgia, "Times New Roman", serif;
-	font-size: 1.25rem;
+.site-section .track-card > * {
+	position: relative !important;
+	z-index: 1 !important;
+	width: 100% !important;
 }
 
-.track-card audio {
-	display: block;
-	width: 100%;
-	margin-top: auto;
+.site-section .track-card h3 {
+	margin: 0 !important;
+	color: #d8a93e !important;
+	font-family: Georgia, "Times New Roman", serif !important;
+	font-size: clamp(1.2rem, 2vw, 1.65rem) !important;
+	line-height: 1.35 !important;
+	font-weight: 700 !important;
+	letter-spacing: .02em !important;
+	background: linear-gradient(180deg, #fff6cf 0%, #f5da8e 18%, #d9a637 38%, #9d6b1a 58%, #f6d77a 78%, #efd58d 100%) !important;
+	-webkit-background-clip: text !important;
+	background-clip: text !important;
+	color: transparent !important;
+	text-shadow: 0 0 1rem rgba(212, 168, 66, .26) !important;
 }
 
-.track-card p,
-.about-copy {
-	margin: .6rem 0 0;
-	color: #d0cbe0;
-	font-size: 1rem;
-	line-height: 1.65;
+.site-section .track-card audio {
+	display: block !important;
+	width: 100% !important;
+	margin-top: auto !important;
+	filter: drop-shadow(0 0 .35rem rgba(212, 168, 66, .18)) !important;
+}
+
+.site-section .track-card p,
+.site-section .track-card .about-copy {
+	margin: .2rem 0 0 !important;
+	color: #ffffff !important;
+	font-size: 1rem !important;
+	line-height: 1.65 !important;
 }
 
 .gold-button {
@@ -493,8 +518,14 @@ p {
 		padding: 1.25rem 1rem;
 	}
 
-	.track-grid {
-		grid-template-columns: 1fr;
+	.site-section .track-grid {
+		grid-template-columns: 1fr !important;
+		gap: .9rem !important;
+	}
+
+	.site-section .track-card {
+		min-height: 11rem !important;
+		padding: 1rem .95rem .9rem !important;
 	}
 
 	.updates-grid {
