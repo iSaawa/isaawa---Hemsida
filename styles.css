@@ -380,16 +380,16 @@ p {
 .player-main-controls {
 	display: flex;
 	align-items: center;
-	gap: 0.6rem;
-	padding: 0.65rem 0.8rem !important;
+	gap: 0.5rem;
+	padding: 0.7rem 0.75rem !important;
 	box-sizing: border-box;
 	width: 100%;
 }
 
 .player-play-btn {
 	flex-shrink: 0;
-	width: 2.3rem;
-	height: 2.3rem;
+	width: 2.2rem;
+	height: 2.2rem;
 	padding: 0;
 	border: 1.5px solid #d4a842;
 	border-radius: 0.35rem;
@@ -415,22 +415,23 @@ p {
 	font-size: 0.8rem;
 	color: #f2f4f6;
 	text-shadow: 0 0 0.3rem rgba(212, 168, 66, .2);
-	min-width: 5.2rem;
+	min-width: 5rem;
 	font-weight: 500;
 	letter-spacing: 0.02em;
+	margin-right: 0.3rem;
 }
 
 .player-volume-icon {
 	flex-shrink: 0;
 	color: #d4a842;
-	font-size: 1rem;
+	font-size: 0.95rem;
 	cursor: pointer;
 	transition: color 0.2s ease;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 1rem;
-	height: 1rem;
+	width: 0.95rem;
+	height: 0.95rem;
 }
 
 .player-volume-icon:hover {
@@ -440,14 +441,14 @@ p {
 .player-volume-control {
 	-webkit-appearance: none;
 	appearance: none;
-	width: 3.2rem;
+	width: 3rem;
 	height: 0.3rem;
 	background: rgba(212, 168, 66, .2);
 	border-radius: 0.2rem;
 	cursor: pointer;
 	border: none;
 	padding: 0;
-	margin: 0;
+	margin: 0 0 0 0.4rem;
 	flex-shrink: 0;
 	box-sizing: border-box;
 }
