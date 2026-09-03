@@ -19,6 +19,59 @@
 	<link rel="icon" type="image/jpeg" href="isaawa-huvudlogga.jpeg">
 	<link rel="stylesheet" href="styles.css">
     <link rel="canonical" href="https://isaawa.github.io/isaawa---Hemsida/musik.html">
+    <style>
+		.track-grid .track-card {
+			display: flex;
+			flex-direction: column;
+			min-width: 0;
+		}
+
+		.track-grid .track-card > img,
+		.track-grid .track-card > .production-note {
+			flex: 0 0 160px;
+			min-height: 160px;
+		}
+
+		.track-grid .cover-frame {
+			position: relative;
+			flex: 0 0 160px;
+			min-height: 160px;
+			width: 100%;
+		}
+
+		.track-grid .cover-frame::after {
+			content: "";
+			position: absolute;
+			inset: 4px;
+			border: 1px solid transparent;
+			border-radius: 0.45rem;
+			background: conic-gradient(from 45deg, #d4a842, #7650a8 25%, #7650a8 50%, #d4a842 75%, #d4a842) border-box;
+			-webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
+			-webkit-mask-composite: xor;
+			mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
+			mask-composite: exclude;
+			pointer-events: none;
+		}
+
+		.track-grid .cover-frame > img {
+			display: block;
+			width: 100%;
+			height: 160px;
+			object-fit: contain !important;
+			object-position: center;
+		}
+
+		.track-grid .track-card > .custom-audio-player {
+			margin-top: auto;
+		}
+
+		.site-footer {
+			background:
+				radial-gradient(ellipse at 50% 0%, rgba(255, 240, 173, .5) 0%, rgba(255, 240, 173, 0) 38%),
+				linear-gradient(180deg, #f6d77a 0%, #d4a842 18%, #8f621c 48%, #c49432 72%, #f1d277 100%);
+			box-shadow: 0 0 1.2rem rgba(218, 174, 76, .22), inset 0 1px rgba(255, 248, 210, .75), inset 0 -1px rgba(78, 46, 12, .55);
+		}
+	</style>
 </head>
 <body id="top">
 	<nav class="language-switcher" aria-label="Välj språk">
@@ -37,6 +90,27 @@
 		<section class="site-section" aria-labelledby="tracks-heading">
 			<h2 class="section-heading" id="tracks-heading">Mina låtar</h2>
 			<div class="track-grid">
+				<article class="track-card">
+					<h3>Ni stod kvar</h3>
+					<div class="cover-frame"><img src="audio/Ni stod kvar MIC.PNG" alt="Ni stod kvar" style="display:block; width:100%; height:160px; object-fit:cover; border-radius:0.7rem; border:1px solid rgba(212,168,66,.65); background:#050505;"></div>
+					<div class="custom-audio-player">
+						<audio>
+							<source src="audio/Ni stod kvar RÄTT.mp3" type="audio/mpeg">
+						</audio>
+						<div class="player-main-controls">
+							<button class="player-play-btn" title="Play/Pause">▶</button>
+							<span class="player-time">0:00 / 0:00</span>
+							<span class="player-volume-icon">🔊</span>
+							<input type="range" class="player-volume-control" min="0" max="100" value="100">
+						</div>
+						<div class="player-progress-container">
+							<div class="player-progress-bar">
+								<div class="player-progress-fill"></div>
+								<input type="range" class="player-seekbar" min="0" max="100" value="0">
+							</div>
+						</div>
+					</div>
+				</article>
 				<article class="track-card">
 					<h3>Marie, du är mitt liv</h3>
 					<p class="production-note"><strong>Under produktion:</strong> 
@@ -60,33 +134,8 @@
 					</div>
 				</article>
 				<article class="track-card">
-					<h3>Vi ska ta oss dit</h3>
-					<p class="production-note"><strong>Under produktion:</strong> Den här låten är fortfarande under produktion och går ännu inte att provlyssna på.</p>
-				</article>
-				<article class="track-card">
-					<h3>När jag gör allt fel</h3>
-					<img src="audio/nar-jag-gor-allt-fel-ny.jpeg" alt="När jag gör allt fel" style="display:block; width:100%; height:160px; object-fit:cover; border-radius:0.7rem; border:1px solid rgba(212,168,66,.65); background:#050505;">
-					<div class="custom-audio-player">
-						<audio>
-							<source src="audio/När jag gör allt fel.mp3" type="audio/mpeg">
-						</audio>
-					<div class="player-main-controls">
-						<button class="player-play-btn" title="Play/Pause">▶</button>
-						<span class="player-time">0:00 / 0:00</span>
-						<span class="player-volume-icon">🔊</span>
-						<input type="range" class="player-volume-control" min="0" max="100" value="100">
-					</div>
-					<div class="player-progress-container">
-						<div class="player-progress-bar">
-							<div class="player-progress-fill"></div>
-							<input type="range" class="player-seekbar" min="0" max="100" value="0">
-							</div>
-						</div>
-					</div>
-				</article>
-				<article class="track-card">
 					<h3>Så nära</h3>
-					<img src="audio/sa-nara-bild.PNG" alt="Så nära" style="display:block; width:100%; height:160px; object-fit:cover; border-radius:0.7rem; border:1px solid rgba(212,168,66,.65); background:#050505;">
+					<div class="cover-frame"><img src="audio/sa-nara-bild.PNG" alt="Så nära" style="display:block; width:100%; height:160px; object-fit:cover; border-radius:0.7rem; border:1px solid rgba(212,168,66,.65); background:#050505;"></div>
 					<div class="custom-audio-player">
 						<audio>
 							<source src="audio/sa-nara.mp3" type="audio/mpeg">
@@ -104,6 +153,31 @@
 							</div>
 						</div>
 					</div>
+				</article>
+				<article class="track-card">
+					<h3>När jag gör allt fel</h3>
+					<div class="cover-frame"><img src="audio/nar-jag-gor-allt-fel-ny.jpeg" alt="När jag gör allt fel" style="display:block; width:100%; height:160px; object-fit:cover; border-radius:0.7rem; border:1px solid rgba(212,168,66,.65); background:#050505;"></div>
+					<div class="custom-audio-player">
+						<audio>
+							<source src="audio/När jag gör allt fel.mp3" type="audio/mpeg">
+						</audio>
+						<div class="player-main-controls">
+							<button class="player-play-btn" title="Play/Pause">▶</button>
+							<span class="player-time">0:00 / 0:00</span>
+							<span class="player-volume-icon">🔊</span>
+							<input type="range" class="player-volume-control" min="0" max="100" value="100">
+						</div>
+						<div class="player-progress-container">
+							<div class="player-progress-bar">
+								<div class="player-progress-fill"></div>
+								<input type="range" class="player-seekbar" min="0" max="100" value="0">
+							</div>
+						</div>
+					</div>
+				</article>
+				<article class="track-card">
+					<h3>Vi ska ta oss dit</h3>
+					<p class="production-note"><strong>Under produktion:</strong> Den här låten är fortfarande under produktion och går ännu inte att provlyssna på.</p>
 				</article>
 			</div>
 		</section>
@@ -150,6 +224,15 @@
 						audio.pause();
 						playBtn.textContent = '▶';
 					}
+				});
+
+				playBtn.addEventListener('dblclick', () => {
+					audio.currentTime = 0;
+					progressFill.style.width = '0%';
+					seekbar.value = 0;
+					timeDisplay.textContent = '0:00 / ' + formatTime(audio.duration);
+					audio.play();
+					playBtn.textContent = '⏸';
 				});
 				
 				// Update progress when audio plays
