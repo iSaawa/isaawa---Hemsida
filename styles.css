@@ -604,10 +604,10 @@ p {
 	width: min(100%, 920px);
 	margin: 2rem auto 0;
 	padding: 1.5rem;
-	border: 1px solid rgba(218, 174, 76, .35);
+	border: 1px solid transparent;
 	border-radius: 1rem;
-	background: linear-gradient(145deg, rgba(18, 14, 10, .94), rgba(42, 47, 53, .82));
-	box-shadow: 0 0 1.2rem rgba(218, 174, 76, .12), inset 0 1px rgba(255, 235, 174, .1);
+	background: linear-gradient(145deg, #030304, #160d24) padding-box, linear-gradient(135deg, #70501f, #d4a842 28%, #8f621c 50%, #f1d277 72%, #70501f) border-box;
+	box-shadow: 0 0 1rem rgba(118, 80, 168, .12), 0 0 .35rem rgba(212, 168, 66, .16), inset 0 1px rgba(255, 235, 174, .08), inset 0 -1px rgba(56, 31, 10, .45);
 	text-align: center;
 }
 
@@ -625,7 +625,10 @@ p {
 }
 
 .footer-links a {
-	color: #fff0ad;
+	background: linear-gradient(180deg, #f1d277 0%, #d4a842 42%, #8f621c 70%, #d4a842 100%);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
 	font-size: .9rem;
 	text-decoration: none;
 	transition: color .2s ease, text-shadow .2s ease;

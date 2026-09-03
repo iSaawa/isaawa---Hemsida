@@ -131,6 +131,39 @@
 			animation: fadeIn 0.3s ease;
 		}
 
+		.site-footer {
+			border: 1px solid transparent;
+			background: linear-gradient(145deg, #030304, #160d24) padding-box, linear-gradient(135deg, #70501f, #d4a842 28%, #8f621c 50%, #f1d277 72%, #70501f) border-box;
+			box-shadow: 0 0 1rem rgba(118, 80, 168, .12), 0 0 .35rem rgba(212, 168, 66, .16), inset 0 1px rgba(255, 235, 174, .08), inset 0 -1px rgba(56, 31, 10, .45);
+		}
+
+		.site-footer .footer-credit {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: .75rem;
+			margin: 1rem auto 0;
+			padding: .8rem 0;
+			color: #d4a842;
+		}
+
+		.site-footer .footer-credit::before,
+		.site-footer .footer-credit::after {
+			content: "";
+			flex: 0 1 7rem;
+			height: 1px;
+			background: linear-gradient(90deg, transparent, #8f621c 20%, #f1d277 50%, #8f621c 80%, transparent);
+			box-shadow: 0 0 4px rgba(212, 168, 66, .18);
+		}
+
+		.site-footer .footer-links a {
+			background: linear-gradient(180deg, #f1d277 0%, #d4a842 42%, #8f621c 70%, #d4a842 100%);
+			-webkit-background-clip: text;
+			background-clip: text;
+			color: transparent;
+			text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+		}
+
 		@keyframes fadeIn {
 			from {
 				opacity: 0;
@@ -175,13 +208,13 @@
 
 	<footer class="site-footer">
 		<p>© 2026 iSaawa</p>
-		<p>Music, IT and creative projects.</p>
+		<p>Music, IT, Gaming and creative projects.</p>
+		<p class="footer-credit">— Created by Father and Son —</p>
 		<nav class="footer-links" aria-label="Footer links">
 			<a href="index-en.html">Home</a>
 			<a href="music-en.html">Music</a>
 			<a href="it-projects-en.html">IT &amp; game projects</a>
-			<a href="https://suno.com/@isaawa" target="_blank" rel="noopener noreferrer">Suno</a>
-			<a href="#top">To top</a>
+			<a href="#top">Back to top</a>
 		</nav>
 	</footer>
 	<script>
