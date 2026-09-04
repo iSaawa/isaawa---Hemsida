@@ -616,6 +616,25 @@ p {
 	font-size: .95rem;
 }
 
+.site-footer .footer-credit {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: .75rem;
+	margin: 1rem auto 0;
+	padding: .8rem 0;
+	color: #d4a842;
+}
+
+.site-footer .footer-credit::before,
+.site-footer .footer-credit::after {
+	content: "";
+	flex: 0 1 7rem;
+	height: 1px;
+	background: linear-gradient(90deg, transparent, #8f621c 20%, #f1d277 50%, #8f621c 80%, transparent);
+	box-shadow: 0 0 4px rgba(212, 168, 66, .18);
+}
+
 .footer-links {
 	display: flex;
 	justify-content: center;
