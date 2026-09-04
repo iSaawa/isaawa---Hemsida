@@ -96,8 +96,20 @@
 			-webkit-background-clip: text;
 			background-clip: text;
 			color: transparent;
+			cursor: pointer;
+			transition: background .25s ease, text-shadow .25s ease;
 			text-shadow: 0 0 0 rgba(0, 0, 0, 0);
 		}
+
+		.site-footer .footer-links a:hover,
+		.site-footer .footer-links a:focus-visible {
+			background: linear-gradient(180deg, #d9b4f2 0%, #a66bd0 42%, #6f2da8 72%, #b68bdd 100%);
+			-webkit-background-clip: text;
+			background-clip: text;
+			color: transparent;
+			text-shadow: 0 0 .7rem rgba(142, 101, 192, .55);
+		}
+
 	</style>
 </head>
 <body id="top">
@@ -105,10 +117,17 @@
 		<a class="language-button active" href="musik.html" aria-label="Svenska, aktivt språk" aria-current="page"><span>SWE</span><span aria-hidden="true">🇸🇪</span></a>
 		<a class="language-button" href="music-en.html" aria-label="English"><span>ENG</span><span aria-hidden="true">🇬🇧</span></a>
 	</nav>
+	<nav class="main-nav" aria-label="Huvudmeny">
+		<a href="index.html">START</a>
+		<a href="musik.html" class="active">MUSIK</a>
+		<a href="it-projekt.html">IT &amp; SPELPROJEKT</a>
+		<a href="index.html#contact-heading">KONTAKT</a>
+	</nav>
+	<div class="page-back-wrap">
+		<button type="button" class="page-back-button" aria-label="Tillbaka" onclick="history.back()">←</button>
+	</div>
 
 	<div class="site-sections">
-		<a class="hero-button back-button" href="index.html">Till startsidan</a>
-
 		<section class="site-section" aria-labelledby="music-heading">
 			<h1 class="section-heading" id="music-heading">Musik</h1>
 			<p>Musik är mitt sätt att få utlopp för känslor, tankar och sådant som ibland är svårt att sätta ord på. Här samlar jag låtar som betyder något för mig – personliga berättelser om kärlek, livet, motgångar och drömmar.</p>
@@ -116,6 +135,7 @@
 
 		<section class="site-section" aria-labelledby="tracks-heading">
 			<h2 class="section-heading" id="tracks-heading">Mina låtar</h2>
+			<button type="button" class="premium-clickable-button play-all-button"><span class="play-all-label">▶ Spela alla</span></button>
 			<div class="track-grid">
 				<article class="track-card">
 					<h3>Ni stod kvar</h3>
@@ -224,8 +244,57 @@
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
 			const players = document.querySelectorAll('.custom-audio-player');
+			const playAllBtn = document.querySelector('.play-all-button');
+			const playAllLabel = playAllBtn.querySelector('.play-all-label');
+			let playAllActive = false;
+			let queueIndex = -1;
+
+			function stopOtherAudio(currentAudio) {
+				players.forEach(otherPlayer => {
+					const otherAudio = otherPlayer.querySelector('audio');
+					const otherPlayBtn = otherPlayer.querySelector('.player-play-btn');
+					if (otherAudio !== currentAudio && !otherAudio.paused) {
+						otherAudio.pause();
+						otherPlayBtn.textContent = '▶';
+					}
+				});
+			}
+
+			function startQueueTrack(index) {
+				const player = players[index];
+				if (!player) {
+					playAllActive = false;
+					queueIndex = -1;
+					playAllLabel.textContent = '▶ Spela alla';
+					return;
+				}
+				queueIndex = index;
+				const audio = player.querySelector('audio');
+				const playBtn = player.querySelector('.player-play-btn');
+				stopOtherAudio(audio);
+				audio.currentTime = 0;
+				audio.play();
+				playBtn.textContent = '⏸';
+				playAllLabel.textContent = '⏸ Pausa';
+			}
+
+			playAllBtn.addEventListener('click', () => {
+				if (playAllActive && queueIndex >= 0) {
+					const currentAudio = players[queueIndex].querySelector('audio');
+					if (currentAudio.paused) {
+						currentAudio.play();
+						playAllLabel.textContent = '⏸ Pausa';
+					} else {
+						currentAudio.pause();
+						playAllLabel.textContent = '▶ Spela alla';
+					}
+					return;
+				}
+				playAllActive = true;
+				startQueueTrack(queueIndex >= 0 ? queueIndex : 0);
+			});
 			
-			players.forEach(player => {
+			players.forEach((player, index) => {
 				const audio = player.querySelector('audio');
 				const playBtn = player.querySelector('.player-play-btn');
 				const seekbar = player.querySelector('.player-seekbar');
@@ -244,7 +313,11 @@
 				
 				// Play/Pause button
 				playBtn.addEventListener('click', () => {
+					playAllActive = false;
+					queueIndex = -1;
+					playAllLabel.textContent = '▶ Spela alla';
 					if (audio.paused) {
+						stopOtherAudio(audio);
 						audio.play();
 						playBtn.textContent = '⏸';
 					} else {
@@ -254,6 +327,10 @@
 				});
 
 				playBtn.addEventListener('dblclick', () => {
+					playAllActive = false;
+					queueIndex = -1;
+					playAllLabel.textContent = '▶ Spela alla';
+					stopOtherAudio(audio);
 					audio.currentTime = 0;
 					progressFill.style.width = '0%';
 					seekbar.value = 0;
@@ -273,6 +350,9 @@
 				// When audio ends
 				audio.addEventListener('ended', () => {
 					playBtn.textContent = '▶';
+					if (playAllActive) {
+						startQueueTrack(index + 1);
+					}
 				});
 				
 				// Seeking via seekbar

@@ -79,25 +79,6 @@
 			box-shadow: 0 0 0.8rem rgba(212, 168, 66, .25), inset 0 1px rgba(255, 240, 173, .15);
 		}
 
-		.login-button {
-			padding: 0.85rem 1.5rem;
-			border: 1px solid #d4a842;
-			border-radius: 0.5rem;
-			background: linear-gradient(135deg, #7650a8, #3d255f);
-			color: #f2f4f6;
-			font-weight: 700;
-			font-size: 1rem;
-			cursor: pointer;
-			transition: all 0.2s ease;
-			box-shadow: 0 0 0.9rem rgba(218, 174, 76, .18), inset 0 1px rgba(255, 240, 173, .2);
-		}
-
-		.login-button:hover {
-			transform: translateY(-2px);
-			background: linear-gradient(135deg, #8e65c0, #513276);
-			box-shadow: 0 0 1.2rem rgba(218, 174, 76, .35), inset 0 1px rgba(255, 240, 173, .3);
-		}
-
 		.login-back {
 			display: block;
 			text-align: center;
@@ -181,10 +162,17 @@
 		<a class="language-button" href="weaponizer-login.html" aria-label="Swedish"><span>SWE</span><span aria-hidden="true">🇸🇪</span></a>
 		<a class="language-button active" href="weaponizer-login-en.html" aria-label="English, active language" aria-current="page"><span>ENG</span><span aria-hidden="true">🇬🇧</span></a>
 	</nav>
+	<nav class="main-nav" aria-label="Main menu">
+		<a href="index-en.html">HOME</a>
+		<a href="music-en.html">MUSIC</a>
+		<a href="it-projects-en.html" class="active">IT &amp; GAME PROJECTS</a>
+		<a href="index-en.html#contact-heading">CONTACT</a>
+	</nav>
+	<div class="page-back-wrap">
+		<button type="button" class="premium-clickable-button page-back-button" aria-label="Back" onclick="history.back()">←</button>
+	</div>
 
 	<div class="site-sections">
-		<a class="hero-button back-button" href="it-projects-en.html">Back</a>
-
 		<section class="site-section" aria-labelledby="login-heading">
 			<h1 class="section-heading" id="login-heading">Weaponizer</h1>
 			<div class="login-container">
@@ -198,7 +186,7 @@
 						<label for="password">Password</label>
 						<input type="password" id="password" name="password" placeholder="Enter your password" required>
 					</div>
-					<button type="button" class="login-button" id="loginBtn">Log in</button>
+					<button type="button" class="premium-clickable-button login-button" id="loginBtn">Log in</button>
 					<div class="login-message" id="loginMessage">The test area will open soon for selected testers.</div>
 				</form>
 				<a href="it-projects-en.html" class="login-back">Back to projects</a>
