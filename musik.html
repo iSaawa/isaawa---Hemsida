@@ -135,8 +135,30 @@
 
 		<section class="site-section" aria-labelledby="tracks-heading">
 			<h2 class="section-heading" id="tracks-heading">Mina låtar</h2>
-			<button type="button" class="premium-clickable-button play-all-button"><span class="play-all-label">▶ Spela alla</span></button>
-			<button type="button" class="premium-clickable-button play-my-playlist-button"><span class="play-my-playlist-label">▶ Spela min spellista</span></button>
+			<section class="now-playing" aria-labelledby="now-playing-heading">
+				<div class="now-playing-heading-row">
+					<div>
+						<p class="now-playing-eyebrow">NU SPELAS</p>
+						<h3 class="now-playing-title" id="now-playing-heading">Ingen låt vald</h3>
+					</div>
+					<div class="now-playing-visualizer" aria-label="Ljudvisualisering" role="img">
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+					</div>
+				</div>
+				<div class="now-playing-controls">
+					<button type="button" class="premium-clickable-button now-playing-prev" aria-label="Föregående låt">|◀</button>
+					<button type="button" class="premium-clickable-button now-playing-skip now-playing-back-10" aria-label="Spola bak 10 sekunder">−10</button>
+					<button type="button" class="premium-clickable-button now-playing-play" aria-label="Spela">▶</button>
+					<button type="button" class="premium-clickable-button now-playing-skip now-playing-forward-10" aria-label="Spola fram 10 sekunder">+10</button>
+					<button type="button" class="premium-clickable-button now-playing-next" aria-label="Nästa låt">▶|</button>
+					<span class="now-playing-time">0:00 / 0:00</span>
+				</div>
+				<div class="now-playing-progress"><div class="now-playing-progress-fill"></div><input type="range" min="0" max="100" value="0" aria-label="Låtens position"></div>
+			</section>
+			<div class="music-playback-actions">
+				<button type="button" class="premium-clickable-button play-all-button"><span class="play-all-label">▶ Spela alla</span></button>
+				<button type="button" class="premium-clickable-button play-my-playlist-button"><span class="play-my-playlist-label">▶ Spela min spellista</span></button>
+			</div>
 			<div class="playlist-manager" aria-labelledby="playlist-manager-heading">
 				<h3 class="playlist-manager-heading" id="playlist-manager-heading">Mina spellistor</h3>
 				<button type="button" class="premium-clickable-button playlist-create-button">+ Skapa spellista</button>
@@ -266,6 +288,31 @@
 			const activePlaylistStorageKey = 'isaawa-active-playlist';
 			const playlistCreateBtn = document.querySelector('.playlist-create-button');
 			const playlistList = document.querySelector('.playlist-list');
+			const nowPlaying = document.querySelector('.now-playing');
+			const nowPlayingTitle = document.querySelector('.now-playing-title');
+			const nowPlayingPlay = document.querySelector('.now-playing-play');
+			const nowPlayingPrev = document.querySelector('.now-playing-prev');
+			const nowPlayingNext = document.querySelector('.now-playing-next');
+			const nowPlayingBack10 = document.querySelector('.now-playing-back-10');
+			const nowPlayingForward10 = document.querySelector('.now-playing-forward-10');
+			const nowPlayingTime = document.querySelector('.now-playing-time');
+			const nowPlayingProgress = document.querySelector('.now-playing-progress input');
+			const nowPlayingProgressFill = document.querySelector('.now-playing-progress-fill');
+			const visualizer = document.querySelector('.now-playing-visualizer');
+			visualizer.innerHTML = '<span></span>'.repeat(120);
+			const visualizerBars = visualizer.querySelectorAll('span');
+			visualizerBars.forEach((bar, index) => {
+					const sectionPosition = index % 40;
+					const sectionRatio = sectionPosition / 39;
+					const pulse = Math.pow(Math.sin(Math.PI * sectionRatio), .78);
+					const musicalVariation = .42 + .28 * Math.sin(index * 1.73) + .18 * Math.sin(index * .47 + 1.2);
+					const wave = .06 + pulse * Math.max(.12, musicalVariation);
+				bar.style.transform = `scaleY(${Math.min(1.18, wave)})`;
+				bar.style.opacity = `${.38 + Math.min(1, wave) * .62}`;
+			});
+			let nowPlayingIndex = -1;
+			let visualizerFrame = null;
+			let visualizerPhase = 0;
 			let playAllActive = false;
 			let queueIndex = -1;
 			let playlistActive = false;
@@ -302,6 +349,60 @@
 
 			function activePlaylist() {
 				return playlists.find(playlist => playlist.id === activePlaylistId) || null;
+			}
+
+			function formatTime(seconds) {
+				if (!isFinite(seconds)) return '0:00';
+				const mins = Math.floor(seconds / 60);
+				const secs = Math.floor(seconds % 60);
+				return `${mins}:${secs.toString().padStart(2, '0')}`;
+			}
+
+			function animateVisualizer() {
+				if (!nowPlaying.classList.contains('is-playing')) {
+					visualizerFrame = null;
+					return;
+				}
+				visualizerPhase += .12;
+				visualizerBars.forEach((bar, index) => {
+					const sectionPosition = index % 40;
+					const sectionRatio = sectionPosition / 39;
+					const pulse = Math.pow(Math.sin(Math.PI * sectionRatio), .78);
+					const musicalVariation = .42 + .28 * Math.sin(index * 1.73) + .18 * Math.sin(index * .47 + 1.2) + .12 * Math.sin(visualizerPhase + index * .21);
+					const wave = .06 + pulse * Math.max(.12, musicalVariation);
+					bar.style.transform = `scaleY(${Math.min(1.18, wave)})`;
+					bar.style.opacity = `${.38 + Math.min(1, wave) * .62}`;
+				});
+				visualizerFrame = requestAnimationFrame(animateVisualizer);
+			}
+
+			function updateNowPlaying(index) {
+				if (!players[index]) return;
+				nowPlayingIndex = index;
+				nowPlayingTitle.textContent = trackCards[index].querySelector('h3').textContent;
+				const audio = players[index].querySelector('audio');
+				nowPlayingTime.textContent = formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
+				nowPlayingProgress.value = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+				nowPlayingProgressFill.style.width = nowPlayingProgress.value + '%';
+			}
+
+			function syncNowPlayingState() {
+				const audio = nowPlayingIndex >= 0 ? players[nowPlayingIndex].querySelector('audio') : null;
+				const isPlaying = audio && !audio.paused;
+				nowPlaying.classList.toggle('is-playing', Boolean(isPlaying));
+				nowPlayingPlay.textContent = isPlaying ? '⏸' : '▶';
+				if (isPlaying && !visualizerFrame) animateVisualizer();
+			}
+
+			function playNowPlayingIndex(index, resetPosition) {
+				if (!players[index]) return;
+				const audio = players[index].querySelector('audio');
+				stopOtherAudio(audio);
+				updateNowPlaying(index);
+				if (resetPosition) audio.currentTime = 0;
+				audio.play();
+				players[index].querySelector('.player-play-btn').textContent = '⏸';
+				syncNowPlayingState();
 			}
 
 			function savePlaylists() {
@@ -467,10 +568,8 @@
 				playAllLabel.textContent = '▶ Spela alla';
 				playlistActive = true;
 				playlistIndex = 0;
-				const audio = playlistTracks[0].querySelector('audio');
-				stopOtherAudio(audio);
-				audio.currentTime = 0;
-				audio.play();
+				const firstIndex = players.indexOf(playlistTracks[0]);
+				playNowPlayingIndex(firstIndex, true);
 				playlistTracks[0].querySelector('.player-play-btn').textContent = '⏸';
 				playMyPlaylistLabel.textContent = '⏸ Pausa min spellista';
 			}
@@ -495,6 +594,7 @@
 					playAllActive = false;
 					queueIndex = -1;
 					playAllLabel.textContent = '▶ Spela alla';
+					syncNowPlayingState();
 					return;
 				}
 				queueIndex = index;
@@ -502,10 +602,49 @@
 				const playBtn = player.querySelector('.player-play-btn');
 				stopOtherAudio(audio);
 				audio.currentTime = 0;
+				updateNowPlaying(index);
 				audio.play();
 				playBtn.textContent = '⏸';
 				playAllLabel.textContent = '⏸ Pausa';
+				syncNowPlayingState();
 			}
+
+			nowPlayingPlay.addEventListener('click', () => {
+				if (nowPlayingIndex < 0) return;
+				const audio = players[nowPlayingIndex].querySelector('audio');
+				if (audio.paused) {
+					audio.play();
+				} else audio.pause();
+				syncNowPlayingState();
+			});
+
+			nowPlayingPrev.addEventListener('click', () => {
+				const sequence = playlistActive ? playlistTracks.map(player => players.indexOf(player)) : Array.from(players, (_, index) => index);
+				const position = sequence.indexOf(nowPlayingIndex);
+				if (position > 0) playNowPlayingIndex(sequence[position - 1], true);
+			});
+
+			nowPlayingNext.addEventListener('click', () => {
+				const sequence = playlistActive ? playlistTracks.map(player => players.indexOf(player)) : Array.from(players, (_, index) => index);
+				const position = sequence.indexOf(nowPlayingIndex);
+				if (position >= 0 && position < sequence.length - 1) playNowPlayingIndex(sequence[position + 1], true);
+			});
+
+			function skipNowPlaying(seconds) {
+				if (nowPlayingIndex < 0) return;
+				const audio = players[nowPlayingIndex].querySelector('audio');
+				const duration = isFinite(audio.duration) ? audio.duration : audio.currentTime + seconds;
+				audio.currentTime = Math.max(0, Math.min(duration, audio.currentTime + seconds));
+			}
+
+			nowPlayingBack10.addEventListener('click', () => skipNowPlaying(-10));
+			nowPlayingForward10.addEventListener('click', () => skipNowPlaying(10));
+
+			nowPlayingProgress.addEventListener('input', event => {
+				if (nowPlayingIndex < 0) return;
+				const audio = players[nowPlayingIndex].querySelector('audio');
+				audio.currentTime = (event.target.value / 100) * audio.duration;
+			});
 
 			playAllBtn.addEventListener('click', () => {
 				resetPlaylistState();
@@ -518,6 +657,7 @@
 						currentAudio.pause();
 						playAllLabel.textContent = '▶ Spela alla';
 					}
+					syncNowPlayingState();
 					return;
 				}
 				playAllActive = true;
@@ -534,6 +674,7 @@
 						currentAudio.pause();
 						playMyPlaylistLabel.textContent = '▶ Spela min spellista';
 					}
+					syncNowPlayingState();
 					return;
 				}
 				startPlaylist();
@@ -586,12 +727,14 @@
 					resetPlaylistState();
 					if (audio.paused) {
 						stopOtherAudio(audio);
+						updateNowPlaying(index);
 						audio.play();
 						playBtn.textContent = '⏸';
 					} else {
 						audio.pause();
 						playBtn.textContent = '▶';
 					}
+					syncNowPlayingState();
 				});
 
 				playBtn.addEventListener('dblclick', () => {
@@ -600,12 +743,14 @@
 					playAllLabel.textContent = '▶ Spela alla';
 					resetPlaylistState();
 					stopOtherAudio(audio);
+					updateNowPlaying(index);
 					audio.currentTime = 0;
 					progressFill.style.width = '0%';
 					seekbar.value = 0;
 					timeDisplay.textContent = '0:00 / ' + formatTime(audio.duration);
 					audio.play();
 					playBtn.textContent = '⏸';
+					syncNowPlayingState();
 				});
 				
 				// Update progress when audio plays
@@ -614,6 +759,12 @@
 					progressFill.style.width = progress + '%';
 					seekbar.value = progress;
 					timeDisplay.textContent = formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
+					if (index === nowPlayingIndex) {
+						nowPlayingTime.textContent = timeDisplay.textContent;
+						nowPlayingProgress.value = progress || 0;
+						nowPlayingProgressFill.style.width = (progress || 0) + '%';
+						syncNowPlayingState();
+					}
 				});
 				
 				// When audio ends
@@ -628,10 +779,12 @@
 							const nextAudio = playlistTracks[playlistIndex].querySelector('audio');
 							stopOtherAudio(nextAudio);
 							nextAudio.currentTime = 0;
+							updateNowPlaying(players.indexOf(playlistTracks[playlistIndex]));
 							nextAudio.play();
 							playlistTracks[playlistIndex].querySelector('.player-play-btn').textContent = '⏸';
 						} else {
 							resetPlaylistState();
+							syncNowPlayingState();
 						}
 					}
 				});
