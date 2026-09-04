@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-	<meta charset="UTF-8">
+	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>iSaawa - Musik skapad av far och son</title>
 	<meta name="description" content="Upptäck musik skapad inom iSaawas kreativa far-och-son-projekt med fokus på känslor, berättelser och digital musikproduktion.">
 	<meta property="og:title" content="iSaawa - Musik skapad av far och son">
 	<meta property="og:description" content="Upptäck musik skapad inom iSaawas kreativa far-och-son-projekt med fokus på känslor, berättelser och digital musikproduktion.">
 	<meta property="og:image" content="isaawa-huvudlogga.jpeg">
-	<meta property="og:image:alt" content="iSaawa - musik och IT/spelutveckling">
+	<meta property="og:image:alt" content="iSaawa - music and IT/game development">
 	<meta property="og:type" content="website">
 	<meta property="og:locale" content="sv_SE">
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:title" content="iSaawa - Musik skapad av far och son">
 	<meta name="twitter:description" content="Upptäck musik skapad inom iSaawas kreativa far-och-son-projekt med fokus på känslor, berättelser och digital musikproduktion.">
 	<meta name="twitter:image" content="isaawa-huvudlogga.jpeg">
-	<link rel="icon" type="image/svg+xml" href="favicon.svg">
+	<link rel="icon" type="image/svg+xml" href="favicon.svg" />
 	<link rel="icon" type="image/jpeg" href="isaawa-huvudlogga.jpeg">
 	<link rel="stylesheet" href="styles.css">
     <link rel="canonical" href="https://isaawa.github.io/isaawa---Hemsida/musik.html">
@@ -23,7 +23,7 @@
 		.track-grid .track-card {
 			display: flex;
 			flex-direction: column;
-			min-width: 0;
+			min-width: 100%;
 		}
 
 		.track-grid .track-card > img,
@@ -33,7 +33,7 @@
 		}
 
 		.track-grid .cover-frame {
-			position: relative;
+			position: absolute;
 			flex: 0 0 160px;
 			min-height: 160px;
 			width: 100%;
@@ -44,7 +44,7 @@
 			position: absolute;
 			inset: 4px;
 			border: 1px solid transparent;
-			border-radius: 0.45rem;
+			border-radius: 0.5rem;
 			background: conic-gradient(from 45deg, #d4a842, #7650a8 25%, #7650a8 50%, #d4a842 75%, #d4a842) border-box;
 			-webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
 			-webkit-mask-composite: xor;
@@ -54,7 +54,7 @@
 		}
 
 		.track-grid .cover-frame > img {
-			display: block;
+			display: inline-block;
 			width: 100%;
 			height: 160px;
 			object-fit: contain !important;
@@ -302,13 +302,19 @@
 			visualizer.innerHTML = '<span></span>'.repeat(120);
 			const visualizerBars = visualizer.querySelectorAll('span');
 			visualizerBars.forEach((bar, index) => {
-					const sectionPosition = index % 40;
-					const sectionRatio = sectionPosition / 39;
-					const pulse = Math.pow(Math.sin(Math.PI * sectionRatio), .78);
-					const musicalVariation = .42 + .28 * Math.sin(index * 1.73) + .18 * Math.sin(index * .47 + 1.2);
-					const wave = .06 + pulse * Math.max(.12, musicalVariation);
-				bar.style.transform = `scaleY(${Math.min(1.18, wave)})`;
-				bar.style.opacity = `${.38 + Math.min(1, wave) * .62}`;
+				const sectionPosition = index % 40;
+				const sectionRatio = sectionPosition / 39;
+				const pulse = .12 + Math.pow(Math.sin(Math.PI * sectionRatio), .64) * (.72 + .28 * Math.sin(sectionRatio * Math.PI * 2));
+				const edgeFade = .18 + .82 * Math.sin(Math.PI * sectionRatio);
+				const edgeDistance = Math.min(sectionPosition, 39 - sectionPosition);
+				const transitionRatio = Math.max(0, 1 - edgeDistance / 10);
+				const transitionWave = transitionRatio * (.2 + .08 * Math.sin(index * 1.9) + .035 * Math.sin(index * .73));
+				const musicalVariation = .5 + .2 * Math.sin(index * 1.33) + .13 * Math.sin(index * .47 + 1.2) + .07 * Math.sin(index * .21);
+				const wave = .035 + pulse * edgeFade * Math.max(.1, musicalVariation) * 1.04 + transitionWave;
+				bar.dataset.waveScale = Math.min(1.18, wave);
+				bar.dataset.waveOpacity = .38 + Math.min(1, wave) * .62;
+				bar.style.transform = `scaleY(${bar.dataset.waveScale})`;
+				bar.style.opacity = bar.dataset.waveOpacity;
 			});
 			let nowPlayingIndex = -1;
 			let visualizerFrame = null;
@@ -367,11 +373,24 @@
 				visualizerBars.forEach((bar, index) => {
 					const sectionPosition = index % 40;
 					const sectionRatio = sectionPosition / 39;
-					const pulse = Math.pow(Math.sin(Math.PI * sectionRatio), .78);
-					const musicalVariation = .42 + .28 * Math.sin(index * 1.73) + .18 * Math.sin(index * .47 + 1.2) + .12 * Math.sin(visualizerPhase + index * .21);
-					const wave = .06 + pulse * Math.max(.12, musicalVariation);
-					bar.style.transform = `scaleY(${Math.min(1.18, wave)})`;
-					bar.style.opacity = `${.38 + Math.min(1, wave) * .62}`;
+					const linePhase = visualizerPhase + index * .17;
+					const breath = 1 + .04 * Math.sin(visualizerPhase * .45 + index * .08);
+					const pulse = .12 + Math.pow(Math.sin(Math.PI * sectionRatio), .64) * (.72 + .28 * Math.sin(sectionRatio * Math.PI * 2 + linePhase * .35)) * breath;
+					const edgeFade = .18 + .82 * Math.sin(Math.PI * sectionRatio);
+					const edgeDistance = Math.min(sectionPosition, 39 - sectionPosition);
+					const transitionRatio = Math.max(0, 1 - edgeDistance / 10);
+					const transitionWave = transitionRatio * (.18 + .1 * Math.sin(index * 1.9 + linePhase) + .05 * Math.sin(index * .73 + visualizerPhase * .6));
+					const musicalVariation = .46 + .24 * Math.sin(index * 1.73) + .16 * Math.sin(index * .47 + 1.2) + .1 * Math.sin(visualizerPhase + index * .21);
+					const wave = .035 + pulse * edgeFade * Math.max(.1, musicalVariation) * 1.04 + transitionWave;
+					const currentScale = Number(bar.dataset.waveScale || wave);
+					const smoothedScale = currentScale + (Math.min(1.18, wave) - currentScale) * .09;
+					bar.dataset.waveScale = smoothedScale;
+					bar.style.transform = `scaleY(${smoothedScale})`;
+					const targetOpacity = .38 + Math.min(1, wave) * .62;
+					const currentOpacity = Number(bar.dataset.waveOpacity || targetOpacity);
+					const smoothedOpacity = currentOpacity + (targetOpacity - currentOpacity) * .09;
+					bar.dataset.waveOpacity = smoothedOpacity;
+					bar.style.opacity = smoothedOpacity;
 				});
 				visualizerFrame = requestAnimationFrame(animateVisualizer);
 			}
