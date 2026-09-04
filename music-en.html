@@ -120,9 +120,16 @@
 		<section class="site-section" aria-labelledby="tracks-heading">
 			<h2 class="section-heading" id="tracks-heading">Our songs</h2>
 			<button type="button" class="premium-clickable-button play-all-button"><span class="play-all-label">▶ Play all</span></button>
+			<button type="button" class="premium-clickable-button play-my-playlist-button"><span class="play-my-playlist-label">▶ Play my playlist</span></button>
+			<div class="playlist-manager" aria-labelledby="playlist-manager-heading">
+				<h3 class="playlist-manager-heading" id="playlist-manager-heading">My playlists</h3>
+				<button type="button" class="premium-clickable-button playlist-create-button">+ Create playlist</button>
+				<div class="playlist-list" aria-live="polite"></div>
+			</div>
 			<div class="track-grid">
-				<article class="track-card">
+				<article class="track-card" data-track-id="ni-stod-kvar">
 					<h3>Ni stod kvar</h3>
+					<div class="playlist-picker"><button type="button" class="premium-clickable-button playlist-toggle" data-track-id="ni-stod-kvar" aria-label="Add to playlist" aria-expanded="false">+</button><div class="playlist-picker-menu" hidden></div></div>
 					<div class="cover-frame"><img src="audio/Ni stod kvar MIC.PNG" alt="Ni stod kvar" style="display:block; width:100%; height:160px; object-fit:cover; border-radius:0.7rem; border:1px solid rgba(212,168,66,.65); background:#050505;"></div>
 					<div class="custom-audio-player">
 						<audio>
@@ -142,8 +149,9 @@
 						</div>
 					</div>
 				</article>
-				<article class="track-card">
+				<article class="track-card" data-track-id="marie-du-ar-mitt-liv">
 					<h3>Marie, du är mitt liv</h3>
+					<div class="playlist-picker"><button type="button" class="premium-clickable-button playlist-toggle" data-track-id="marie-du-ar-mitt-liv" aria-label="Add to playlist" aria-expanded="false">+</button><div class="playlist-picker-menu" hidden></div></div>
 					<p>In production: This song is still being refined for the final release. You can already listen to an early preview.</p>
 					<div class="custom-audio-player">
 						<audio>
@@ -163,8 +171,9 @@
 						</div>
 					</div>
 				</article>
-				<article class="track-card">
+				<article class="track-card" data-track-id="sa-nara">
 					<h3>Så nära</h3>
+					<div class="playlist-picker"><button type="button" class="premium-clickable-button playlist-toggle" data-track-id="sa-nara" aria-label="Add to playlist" aria-expanded="false">+</button><div class="playlist-picker-menu" hidden></div></div>
 					<div class="cover-frame"><img src="audio/sa-nara-bild.PNG" alt="Så nära" style="display:block; width:100%; height:160px; object-fit:cover; border-radius:0.7rem; border:1px solid rgba(212,168,66,.65); background:#050505;"></div>
 					<div class="custom-audio-player">
 						<audio>
@@ -184,8 +193,9 @@
 						</div>
 					</div>
 				</article>
-				<article class="track-card">
+				<article class="track-card" data-track-id="nar-jag-gor-allt-fel">
 					<h3>När jag gör allt fel</h3>
+					<div class="playlist-picker"><button type="button" class="premium-clickable-button playlist-toggle" data-track-id="nar-jag-gor-allt-fel" aria-label="Add to playlist" aria-expanded="false">+</button><div class="playlist-picker-menu" hidden></div></div>
 					<div class="cover-frame"><img src="audio/nar-jag-gor-allt-fel-ny.jpeg" alt="När jag gör allt fel" style="display:block; width:100%; height:160px; object-fit:cover; border-radius:0.7rem; border:1px solid rgba(212,168,66,.65); background:#050505;"></div>
 					<div class="custom-audio-player">
 						<audio>
@@ -205,8 +215,9 @@
 						</div>
 					</div>
 				</article>
-				<article class="track-card">
+				<article class="track-card" data-track-id="vi-ska-ta-oss-dit">
 					<h3>Vi ska ta oss dit</h3>
+					<div class="playlist-picker"><button type="button" class="premium-clickable-button playlist-toggle" data-track-id="vi-ska-ta-oss-dit" aria-label="Add to playlist" aria-expanded="false">+</button><div class="playlist-picker-menu" hidden></div></div>
 					<p>In production: This song is still in production and is not yet available to preview.</p>
 				</article>
 			</div>
@@ -227,10 +238,225 @@
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
 			const players = document.querySelectorAll('.custom-audio-player');
+			const trackCards = document.querySelectorAll('.track-card');
+			const playlistButtons = document.querySelectorAll('.playlist-toggle');
+			const playlistPickers = document.querySelectorAll('.playlist-picker');
 			const playAllBtn = document.querySelector('.play-all-button');
 			const playAllLabel = playAllBtn.querySelector('.play-all-label');
+			const playMyPlaylistBtn = document.querySelector('.play-my-playlist-button');
+			const playMyPlaylistLabel = playMyPlaylistBtn.querySelector('.play-my-playlist-label');
+			const playlistsStorageKey = 'isaawa-playlists';
+			const activePlaylistStorageKey = 'isaawa-active-playlist';
+			const playlistCreateBtn = document.querySelector('.playlist-create-button');
+			const playlistList = document.querySelector('.playlist-list');
 			let playAllActive = false;
 			let queueIndex = -1;
+			let playlistActive = false;
+			let playlistIndex = -1;
+			let playlistTracks = [];
+			let playlists = [];
+			let activePlaylistId = null;
+
+			try {
+				const savedPlaylists = JSON.parse(localStorage.getItem(playlistsStorageKey) || '[]');
+				playlists = Array.isArray(savedPlaylists) ? savedPlaylists.filter(playlist => playlist && playlist.id && playlist.name && Array.isArray(playlist.tracks)) : [];
+				activePlaylistId = localStorage.getItem(activePlaylistStorageKey);
+			} catch (error) {
+				playlists = [];
+				activePlaylistId = null;
+			}
+
+			if (!playlists.length) {
+				try {
+					const legacyTrackIds = JSON.parse(localStorage.getItem('isaawa-playlist') || '[]');
+					if (Array.isArray(legacyTrackIds) && legacyTrackIds.length) {
+						const legacyPlaylist = { id: 'playlist-' + Date.now(), name: 'My playlist', tracks: legacyTrackIds };
+						playlists = [legacyPlaylist];
+						activePlaylistId = legacyPlaylist.id;
+					}
+				} catch (error) {
+					playlists = [];
+				}
+			}
+
+			if (!playlists.some(playlist => playlist.id === activePlaylistId)) activePlaylistId = playlists[0]?.id || null;
+			if (!playlists.some(playlist => playlist.id === 'default')) playlists.unshift({ id: 'default', name: 'Min spellista', tracks: [] });
+			if (!activePlaylistId) activePlaylistId = 'default';
+
+			function activePlaylist() {
+				return playlists.find(playlist => playlist.id === activePlaylistId) || null;
+			}
+
+			function savePlaylists() {
+				localStorage.setItem(playlistsStorageKey, JSON.stringify(playlists));
+				if (activePlaylistId) localStorage.setItem(activePlaylistStorageKey, activePlaylistId);
+				else localStorage.removeItem(activePlaylistStorageKey);
+			}
+
+			function updatePlaylistButtons() {
+				renderPlaylistMenus();
+			}
+
+			function closePlaylistMenus() {
+				playlistPickers.forEach(picker => {
+					picker.querySelector('.playlist-picker-menu').hidden = true;
+					picker.querySelector('.playlist-toggle').setAttribute('aria-expanded', 'false');
+				});
+			}
+
+			function addPlaylistOption(menu, playlist, trackId) {
+				const option = document.createElement('button');
+				option.type = 'button';
+				option.className = 'premium-clickable-button playlist-option';
+				const isAdded = playlist.tracks.includes(trackId);
+				option.textContent = (playlist.id === 'default' ? 'My playlist' : playlist.name) + (isAdded ? ' ✓' : '');
+				option.addEventListener('click', () => {
+					if (isAdded) playlist.tracks = playlist.tracks.filter(id => id !== trackId);
+					else playlist.tracks.push(trackId);
+					activePlaylistId = playlist.id;
+					savePlaylists();
+					renderPlaylists();
+				});
+				menu.appendChild(option);
+			}
+
+			function renderPlaylistMenus() {
+				playlistPickers.forEach(picker => {
+					const menu = picker.querySelector('.playlist-picker-menu');
+					const trackId = picker.querySelector('.playlist-toggle').dataset.trackId;
+					menu.innerHTML = '';
+					playlists.forEach(playlist => addPlaylistOption(menu, playlist, trackId));
+					const createOption = document.createElement('button');
+					createOption.type = 'button';
+					createOption.className = 'premium-clickable-button playlist-option';
+					createOption.textContent = '+ Create new playlist';
+					createOption.addEventListener('click', () => {
+						const name = prompt('Name of the new playlist:');
+						if (!name || !name.trim()) return;
+						const playlist = { id: 'playlist-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8), name: name.trim(), tracks: [trackId] };
+						playlists.push(playlist);
+						activePlaylistId = playlist.id;
+						savePlaylists();
+						renderPlaylists();
+					});
+					menu.appendChild(createOption);
+				});
+			}
+
+			function getPlaylistTracks(playlist = activePlaylist()) {
+				if (!playlist) return [];
+				return Array.from(trackCards)
+					.filter(card => playlist.tracks.includes(card.dataset.trackId))
+					.map(card => card.querySelector('.custom-audio-player'))
+					.filter(Boolean);
+			}
+
+			function renderPlaylists() {
+				playlistList.innerHTML = '';
+				if (!playlists.length) {
+					const emptyMessage = document.createElement('p');
+					emptyMessage.className = 'playlist-empty';
+					emptyMessage.textContent = 'Create a playlist to start collecting songs.';
+					playlistList.appendChild(emptyMessage);
+					updatePlaylistButtons();
+					return;
+				}
+				playlists.forEach(playlist => {
+					const item = document.createElement('div');
+					item.className = 'playlist-item' + (playlist.id === activePlaylistId ? ' is-active' : '');
+					const selectButton = document.createElement('button');
+					selectButton.type = 'button';
+					selectButton.className = 'premium-clickable-button playlist-select-button';
+					selectButton.textContent = (playlist.id === 'default' ? 'My playlist' : playlist.name) + ' (' + playlist.tracks.length + ')';
+					selectButton.addEventListener('click', () => {
+						activePlaylistId = playlist.id;
+						savePlaylists();
+						renderPlaylists();
+					});
+					const playButton = document.createElement('button');
+					playButton.type = 'button';
+					playButton.className = 'premium-clickable-button';
+					playButton.textContent = '▶ Play';
+					playButton.addEventListener('click', () => {
+						activePlaylistId = playlist.id;
+						savePlaylists();
+						renderPlaylists();
+						startPlaylist();
+					});
+					const renameButton = document.createElement('button');
+					renameButton.type = 'button';
+					renameButton.className = 'premium-clickable-button';
+					renameButton.textContent = 'Rename';
+					renameButton.disabled = playlist.id === 'default';
+					renameButton.addEventListener('click', () => {
+						const newName = prompt('New playlist name:', playlist.name);
+						if (newName && newName.trim()) {
+							playlist.name = newName.trim();
+							savePlaylists();
+							renderPlaylists();
+						}
+					});
+					const deleteButton = document.createElement('button');
+					deleteButton.type = 'button';
+					deleteButton.className = 'premium-clickable-button';
+					deleteButton.textContent = 'Delete';
+					deleteButton.disabled = playlist.id === 'default';
+					deleteButton.addEventListener('click', () => {
+						if (!confirm('Delete playlist "' + playlist.name + '"?')) return;
+						playlists = playlists.filter(item => item.id !== playlist.id);
+						if (activePlaylistId === playlist.id) activePlaylistId = playlists[0]?.id || null;
+						resetPlaylistState();
+						savePlaylists();
+						renderPlaylists();
+					});
+					const trackList = document.createElement('div');
+					trackList.className = 'playlist-tracks';
+					playlist.tracks.forEach(trackId => {
+						const trackCard = document.querySelector('.track-card[data-track-id="' + trackId + '"]');
+						if (!trackCard) return;
+						const trackRow = document.createElement('div');
+						trackRow.className = 'playlist-track-row';
+						const trackName = document.createElement('span');
+						trackName.textContent = trackCard.querySelector('h3').textContent;
+						const removeButton = document.createElement('button');
+						removeButton.type = 'button';
+						removeButton.className = 'premium-clickable-button';
+						removeButton.textContent = 'Remove';
+						removeButton.addEventListener('click', () => {
+							playlist.tracks = playlist.tracks.filter(id => id !== trackId);
+							savePlaylists();
+							renderPlaylists();
+						});
+						trackRow.append(trackName, removeButton);
+						trackList.appendChild(trackRow);
+					});
+					item.append(selectButton, playButton, renameButton, deleteButton, trackList);
+					playlistList.appendChild(item);
+				});
+				updatePlaylistButtons();
+			}
+
+			function resetPlaylistState() {
+				playlistActive = false;
+				playlistIndex = -1;
+				playMyPlaylistLabel.textContent = '▶ Play my playlist';
+			}
+
+			function startPlaylist() {
+				playlistTracks = getPlaylistTracks();
+				if (!playlistTracks.length) return;
+				playAllActive = false;
+				queueIndex = -1;
+				playAllLabel.textContent = '▶ Play all';
+				playlistActive = true;
+				playlistIndex = 0;
+				const audio = playlistTracks[0].querySelector('audio');
+				stopOtherAudio(audio);
+				audio.currentTime = 0;
+				audio.play();
+				playlistTracks[0].querySelector('.player-play-btn').textContent = '⏸';
+				playMyPlaylistLabel.textContent = '⏸ Pause my playlist';
+			}
 
 			function stopOtherAudio(currentAudio) {
 				players.forEach(otherPlayer => {
@@ -244,6 +470,9 @@
 			}
 
 			function startQueueTrack(index) {
+				playlistActive = false;
+				playlistIndex = -1;
+				playMyPlaylistLabel.textContent = '▶ Play my playlist';
 				const player = players[index];
 				if (!player) {
 					playAllActive = false;
@@ -262,6 +491,7 @@
 			}
 
 			playAllBtn.addEventListener('click', () => {
+				resetPlaylistState();
 				if (playAllActive && queueIndex >= 0) {
 					const currentAudio = players[queueIndex].querySelector('audio');
 					if (currentAudio.paused) {
@@ -276,6 +506,43 @@
 				playAllActive = true;
 				startQueueTrack(queueIndex >= 0 ? queueIndex : 0);
 			});
+
+			playMyPlaylistBtn.addEventListener('click', () => {
+				if (playlistActive && playlistIndex >= 0) {
+					const currentAudio = playlistTracks[playlistIndex].querySelector('audio');
+					if (currentAudio.paused) {
+						currentAudio.play();
+						playMyPlaylistLabel.textContent = '⏸ Pause my playlist';
+					} else {
+						currentAudio.pause();
+						playMyPlaylistLabel.textContent = '▶ Play my playlist';
+					}
+					return;
+				}
+				startPlaylist();
+			});
+
+			playlistButtons.forEach(button => {
+				button.addEventListener('click', event => {
+					event.stopPropagation();
+					const menu = button.nextElementSibling;
+					closePlaylistMenus();
+					menu.hidden = false;
+					button.setAttribute('aria-expanded', 'true');
+				});
+			});
+			document.addEventListener('click', closePlaylistMenus);
+
+			playlistCreateBtn.addEventListener('click', () => {
+				const name = prompt('Name of the new playlist:');
+				if (!name || !name.trim()) return;
+				const playlist = { id: 'playlist-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8), name: name.trim(), tracks: [] };
+				playlists.push(playlist);
+				activePlaylistId = playlist.id;
+				savePlaylists();
+				renderPlaylists();
+			});
+			renderPlaylists();
 			
 			players.forEach((player, index) => {
 				const audio = player.querySelector('audio');
@@ -299,6 +566,7 @@
 					playAllActive = false;
 					queueIndex = -1;
 					playAllLabel.textContent = '▶ Play all';
+					resetPlaylistState();
 					if (audio.paused) {
 						stopOtherAudio(audio);
 						audio.play();
@@ -313,6 +581,7 @@
 					playAllActive = false;
 					queueIndex = -1;
 					playAllLabel.textContent = '▶ Play all';
+					resetPlaylistState();
 					stopOtherAudio(audio);
 					audio.currentTime = 0;
 					progressFill.style.width = '0%';
@@ -335,6 +604,18 @@
 					playBtn.textContent = '▶';
 					if (playAllActive) {
 						startQueueTrack(index + 1);
+					} else if (playlistActive) {
+						playlistTracks = getPlaylistTracks();
+						if (playlistIndex + 1 < playlistTracks.length) {
+							playlistIndex += 1;
+							const nextAudio = playlistTracks[playlistIndex].querySelector('audio');
+							stopOtherAudio(nextAudio);
+							nextAudio.currentTime = 0;
+							nextAudio.play();
+							playlistTracks[playlistIndex].querySelector('.player-play-btn').textContent = '⏸';
+						} else {
+							resetPlaylistState();
+						}
 					}
 				});
 				
