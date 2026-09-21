@@ -207,14 +207,46 @@
 	</footer>
 	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-		
+		const approvedTestEmails = [
+			'casper.sawaryn@gmail.com'
+		];
+
+		const approvedPasswords = {
+			'casper.sawaryn@gmail.com': 'harry1'
+		};
+
+		function normalizeEmail(value) {
+			return String(value || '').trim().toLowerCase();
+		}
+
 		document.addEventListener('DOMContentLoaded', function() {
 			const loginBtn = document.getElementById('loginBtn');
 			const loginMessage = document.getElementById('loginMessage');
-			const loginForm = document.getElementById('loginForm');
+			const emailInput = document.getElementById('email');
+			const passwordInput = document.getElementById('password');
 
 			loginBtn.addEventListener('click', function(e) {
 				e.preventDefault();
+
+				const email = normalizeEmail(emailInput.value);
+				const password = String(passwordInput.value || '').trim();
+
+				if (!email || !password) {
+					loginMessage.textContent = 'Ange e-post och lösenord.';
+					loginMessage.classList.add('show');
+					return;
+				}
+
+				if (approvedTestEmails.includes(email) && approvedPasswords[email] === password) {
+					window.sessionStorage.setItem('weaponizerApproved', 'true');
+					window.sessionStorage.setItem('weaponizerApprovedEmail', email);
+					window.localStorage.setItem('weaponizerApproved', 'true');
+					window.localStorage.setItem('weaponizerApprovedEmail', email);
+					window.location.href = 'weaponizer/index.html';
+					return;
+				}
+
+				loginMessage.textContent = 'Endast godkända testare har åtkomst.';
 				loginMessage.classList.add('show');
 			});
 		});
