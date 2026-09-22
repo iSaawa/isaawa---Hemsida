@@ -1,0 +1,1848 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weaponizer</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background: radial-gradient(ellipse at top, #1f1b2e 0%, #100e18 60%);
+      color: #e8e4f0;
+      font-family: 'Inter', sans-serif;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 20px 18px;
+    }
+
+    h1 {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 26px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-align: center;
+      background: linear-gradient(90deg, #c77dff, #e0aaff, #ffd700);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 36px;
+    }
+
+    form {
+      background: linear-gradient(145deg, #211f2e, #1a1826);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+      border: 1px solid #3d3557;
+      padding: 14px;
+      border-radius: 12px;
+      margin-bottom: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: flex-end;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    label {
+      font-size: 10px;
+      color: #a89cc8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    input {
+      background-color: #15131f;
+      border: 1px solid #4a3d6b;
+      color: #e8e4f0;
+      padding: 7px 9px;
+      border-radius: 8px;
+      width: 110px;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.15s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #c77dff;
+      box-shadow: 0 0 0 3px rgba(199, 125, 255, 0.2);
+    }
+
+    select {
+      background-color: #15131f;
+      border: 1px solid #4a3d6b;
+      color: #e8e4f0;
+      padding: 9px 10px;
+      border-radius: 6px;
+      width: 100%;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: #c77dff;
+      box-shadow: 0 0 0 3px rgba(199, 125, 255, 0.2);
+    }
+
+    select option {
+      background-color: #15131f;
+      color: #e8e4f0;
+    }
+   .game-select {
+  position: relative;
+  width: 100%;
+}
+
+.game-select-button {
+  width: 100%;
+  background: #15131f;
+  border: 1px solid #4a3d6b;
+  color: #e8e4f0;
+  padding: 9px 10px;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: none;
+  letter-spacing: 0;
+}
+
+.game-select-button:hover {
+  border-color: #c77dff;
+  box-shadow: 0 0 0 3px rgba(199, 125, 255, 0.12);
+  transform: none;
+}
+
+.game-select-arrow {
+  color: #a89cc8;
+  font-size: 14px;
+}
+
+.game-select-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+  background: #15131f;
+  border: 1px solid #4a3d6b;
+  border-radius: 6px;
+  padding: 4px;
+  z-index: 100;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+}
+
+.game-select-menu.open {
+  display: block;
+}
+
+.game-select-menu button {
+  width: 100%;
+  background: transparent;
+  color: #d0c8e8;
+  border: none;
+  padding: 8px 9px;
+  border-radius: 4px;
+  text-align: left;
+  box-shadow: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.game-select-menu button:hover {
+  background: rgba(199, 125, 255, 0.10);
+  color: #ffffff;
+  box-shadow: none;
+  transform: none;
+}
+    button {
+      background: linear-gradient(135deg, #7b2ff7, #9d4edd);
+      box-shadow: 0 2px 8px rgba(123, 47, 247, 0.3);
+      color: #fff;
+      border: none;
+      padding: 11px 22px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-family: 'Rajdhani', sans-serif;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: box-shadow 0.2s ease, transform 0.1s ease;
+    }
+
+    button:hover {
+      box-shadow: 0 0 16px rgba(199, 125, 255, 0.5);
+      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    #vapenLista_container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .vapenkort {
+      background: linear-gradient(145deg, #211f2e, #191725);
+      border: 1px solid #3d3557;
+      border-radius: 10px;
+      padding: 14px 14px;
+      display: grid;
+      grid-template-columns: auto 1fr auto auto auto auto auto auto auto;
+      align-items: center;
+      gap: 18px;
+      animation: fadeInUp 0.3s ease;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    /* Weaponizer Compare checkbox */
+.jamforKryss {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  padding: 0;
+  margin: 0;
+
+  background: #15131f;
+  border: 1px solid #5b4a80;
+  border-radius: 5px;
+
+  cursor: pointer;
+  display: grid;
+  place-content: center;
+
+  transition: 0.15s ease;
+}
+
+.jamforKryss:hover {
+  border-color: #c77dff;
+  box-shadow: 0 0 6px rgba(199, 125, 255, 0.35);
+}
+
+.jamforKryss:checked {
+  background: linear-gradient(135deg, #7b2ff7, #9d4edd);
+  border-color: #c77dff;
+  box-shadow: 0 0 8px rgba(199, 125, 255, 0.45);
+}
+
+.jamforKryss:checked::after {
+  content: "";
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) translate(-1px, -1px);
+}
+
+    @media (max-width: 600px) {
+      .vapenkort {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        text-align: left;
+      }
+
+      .vapenkort .namn {
+        margin-bottom: 4px;
+      }
+
+      form {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      input,
+      select {
+        width: 100%;
+      }
+    }
+
+    .vapenkort:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(199, 125, 255, 0.15);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    #varningsruta.visa {
+      animation: fadeInUp 0.3s ease;
+    }
+
+    .vapenkort.basta {
+      border: 1px solid #ffd700;
+      box-shadow: 0 0 18px rgba(255, 215, 0, 0.25);
+      background: linear-gradient(145deg, #2a2418, #1f1c26);
+    }
+
+    .vapenkort .namn {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      color: #f0ebfa;
+    }
+
+    .krona {
+      color: #ffd700;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      background: rgba(255, 215, 0, 0.12);
+      padding: 3px 8px;
+      border-radius: 20px;
+      margin-left: 6px;
+      white-space: nowrap;
+      display: inline-block;
+    }
+
+    .stat {
+      font-size: 13px;
+      color: #a89cc8;
+    }
+
+    .stat b {
+      color: #e8e4f0;
+      font-size: 15px;
+    }
+
+    .ratio {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      color: #c77dff;
+    }
+
+    .vapenkort.basta .ratio {
+      color: #ffd700;
+    }
+
+    .ta-bort-btn {
+      background: transparent;
+      border: 1px solid #5a4d7b;
+      color: #a89cc8;
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    .ta-bort-btn:hover {
+      background: rgba(255, 80, 80, 0.1);
+      border-color: #ff5050;
+      color: #ff8080;
+      box-shadow: none;
+      transform: none;
+    }
+
+    #jamforBtn {
+      margin-top: 20px;
+      width: 100%;
+      background: linear-gradient(135deg, #4a3d6b, #3d3557);
+    }
+
+    #diagram {
+      margin-top: 20px;
+    }
+
+    .compare-box {
+      margin-top: 20px;
+      background: linear-gradient(145deg, #211f2e, #191725);
+      border: 1px solid #3d3557;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+      overflow-x: auto;
+      animation: fadeInUp 0.3s ease;
+    }
+
+    .compare-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 22px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-align: center;
+      margin: 0 0 18px 0;
+      background: linear-gradient(90deg, #c77dff, #e0aaff, #ffd700);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .compare-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 8px;
+      min-width: 520px;
+    }
+
+    .compare-table th {
+      font-family: 'Rajdhani', sans-serif;
+      color: #f0ebfa;
+      font-size: 15px;
+      padding: 10px 12px;
+      text-align: center;
+      letter-spacing: 0.4px;
+    }
+
+    .compare-table th:first-child {
+      text-align: left;
+      color: #a89cc8;
+    }
+
+    .compare-table td {
+      padding: 12px;
+      text-align: center;
+      background: linear-gradient(145deg, #211f2e, #191725);
+      border-top: 1px solid #3d3557;
+      border-bottom: 1px solid #3d3557;
+      color: #e8e4f0;
+      font-size: 13px;
+    }
+
+    .compare-table td:first-child {
+      text-align: left;
+      color: #a89cc8;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-left: 1px solid #3d3557;
+      border-radius: 8px 0 0 8px;
+    }
+
+    .compare-table td:last-child {
+      border-right: 1px solid #3d3557;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .compare-table tr:hover td {
+      background: linear-gradient(145deg, #262235, #1d1a29);
+      box-shadow: 0 0 12px rgba(199, 125, 255, 0.08);
+    }
+
+    .compare-winner {
+      color: #ffd700 !important;
+      font-weight: 700;
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    .value-verdict {
+      margin-top: 18px;
+      padding: 16px;
+      background: linear-gradient(145deg, #211f2e, #1a1826);
+      border: 1px solid #3d3557;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .value-verdict-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: 1px;
+      color: #ffd700;
+      margin-bottom: 6px;
+    }
+
+    .value-verdict-text {
+      color: #d0c8e8;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .value-verdict-recommendation {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #3d3557;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 0.6px;
+      color: #ffd700;
+    }
+
+    .diagram-rad {
+      margin-bottom: 14px;
+    }
+
+    .diagram-etikett {
+      font-size: 13px;
+      color: #d0c8e8;
+      margin-bottom: 4px;
+    }
+
+    .diagram-bakgrund {
+      background-color: #211f2e;
+      border-radius: 5px;
+      overflow: hidden;
+      border: 1px solid #3d3557;
+    }
+
+    .diagram-stapel {
+      height: 22px;
+      background: linear-gradient(90deg, #7b2ff7, #ffd700);
+      width: 0;
+      transition: width 0.6s ease;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Weaponizer</h1>
+
+  <div class="field" style="margin-bottom:20px; max-width:240px;">
+    <label>Playstyle</label>
+    <select id="playstyle">
+      <option value="balanced">Balanced</option>
+      <option value="aggressive">Aggressive</option>
+      <option value="defensive">Defensive</option>
+      <option value="close">Close Range</option>
+      <option value="long">Long Range</option>
+    </select>
+  </div>
+
+  <div class="field" style="margin-bottom:20px; max-width:240px;">
+    <label>Load preset data</label>
+<div class="game-select" id="gameSelect">
+  <button type="button" class="game-select-button" id="gameSelectButton">
+    <span id="selectedGameText">Select game...</span>
+    <span class="game-select-arrow">⌄</span>
+  </button>
+
+  <div class="game-select-menu" id="gameSelectMenu">
+    <button type="button" data-value="cs2">Counter-Strike 2</button>
+    <button type="button" data-value="valorant">Valorant</button>
+    <button type="button" data-value="fortnite">Fortnite</button>
+    <button type="button" data-value="apex">Apex Legends</button>
+    <button type="button" data-value="r6siege">Rainbow Six Siege</button>
+    <button type="button" data-value="bf4">Battlefield 4</button>
+    <button type="button" data-value="bf6">Battlefield 6</button>
+  </div>
+
+  <input type="hidden" id="spelval" value="">
+</div>
+  </div>
+
+  <div class="field" style="margin-bottom:20px;">
+    <label>Search weapons</label>
+    <input
+      type="text"
+      id="sokfalt"
+      onkeyup="filtreraVapen()"
+      placeholder="Type weapon name..."
+      style="width:100%;"
+    >
+  </div>
+
+  <form onsubmit="return false">
+
+    <div class="field">
+      <label>Weapon name</label>
+      <input type="text" id="namn">
+    </div>
+
+    <div class="field">
+      <label>Damage</label>
+      <input type="number" id="skada">
+    </div>
+
+    <div class="field">
+      <label>Range</label>
+      <input type="number" id="range">
+    </div>
+
+    <div class="field">
+      <label>Price</label>
+      <input type="number" id="pris">
+    </div>
+
+    <div class="field">
+      <label>Fire rate (shots/sec)</label>
+      <input type="number" step="0.01" id="eldhastighet">
+    </div>
+
+    <div class="field">
+      <label>Category</label>
+      <select id="kategorival">
+        <option value="Rifle">Rifle</option>
+        <option value="Carbine">Carbine</option>
+        <option value="Pistol">Pistol</option>
+        <option value="SMG">SMG</option>
+        <option value="Sniper">Sniper</option>
+        <option value="Marksman">Marksman</option>
+        <option value="LMG">LMG</option>
+        <option value="Shotgun">Shotgun</option>
+        <option value="Launcher">Launcher</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Attachment</label>
+      <select id="attachmentval">
+        <option value="none">None</option>
+        <option value="silencer">Silencer</option>
+      </select>
+    </div>
+
+    <button type="submit">Add weapon</button>
+
+    <div
+      id="varningsruta"
+      style="
+        width:100%;
+        margin-top:10px;
+        padding:10px 14px;
+        background:rgba(255,80,80,0.1);
+        border:1px solid #ff5050;
+        border-radius:8px;
+        color:#ff8080;
+        font-size:13px;
+        display:none;
+      "
+    ></div>
+
+  </form>
+
+  <div class="field" style="margin-bottom:20px; max-width:240px;">
+    <label>Filter category</label>
+
+    <select id="kategorifilter" onchange="filtreraVapen()">
+      <option value="alla">All categories</option>
+      <option value="Rifle">Rifle</option>
+      <option value="Carbine">Carbine</option>
+      <option value="Pistol">Pistol</option>
+      <option value="SMG">SMG</option>
+      <option value="Sniper">Sniper</option>
+      <option value="Marksman">Marksman</option>
+      <option value="LMG">LMG</option>
+      <option value="Shotgun">Shotgun</option>
+      <option value="Launcher">Launcher</option>
+    </select>
+  </div>
+
+  <div id="vapenLista_container"></div>
+
+  <button id="jamforBtn" onclick="jamforValda()">
+    Compare selected weapons
+  </button>
+
+  <div id="diagram"></div>
+
+  <script>
+    (function() {
+      const approved = localStorage.getItem('weaponizerApproved') === 'true';
+      const email = localStorage.getItem('weaponizerApprovedEmail');
+
+      if (!approved || !email) {
+        window.location.href = '../weaponizer-login.html';
+        return;
+      }
+    })();
+    var vapenLista = [];
+
+    var suppressorData = {
+      cs2: {
+        damageMultiplier: 1,
+        rangeMultiplier: 1,
+        affectsAccuracy: true,
+        affectsRecoil: true,
+        hidesTracers: true,
+        reducesSound: true
+      },
+
+      valorant: {
+        damageMultiplier: 1,
+        rangeMultiplier: 1,
+        builtIn: true,
+        reducesSound: true,
+        informationDenial: true
+      },
+
+      fortnite: {
+        damageMultiplier: 1,
+        rangeMultiplier: 1,
+        reducesSound: true,
+        reducesMuzzleFlash: true
+      },
+
+      apex: {
+        available: false,
+        damageMultiplier: 1,
+        rangeMultiplier: 1
+      },
+
+      r6siege: {
+        available: true,
+        damageMultiplier: 1,
+        rangeMultiplier: 1,
+        reducesSound: true,
+        noRecoilMitigation: true
+      },
+
+      bf4: {
+        available: true,
+        damageMultiplier: 1,
+        rangeMultiplier: 1,
+        reducesSound: true,
+        hidesFromMinimap: true,
+        reducesBulletVelocity: true,
+        reducesHipfireAccuracy: true
+      },
+
+      bf6: {
+        available: true,
+        damageMultiplier: 1,
+        rangeMultiplier: 1,
+        reducesSound: true,
+        hidesFromMinimap: true,
+        multipleSuppressorTypes: true
+      }
+    };
+
+
+    var spelData = {
+
+      cs2: [
+        { namn: "AK-47", skada: 36, pris: 2700, rate: 10.00, kategori: "Rifle" },
+        { namn: "M4A4", skada: 33, pris: 2900, rate: 11.12, kategori: "Rifle" },
+        { namn: "M4A1-S", skada: 38, pris: 2900, rate: 10.00, kategori: "Rifle" },
+        { namn: "Galil AR", skada: 30, pris: 1800, rate: 11.12, kategori: "Rifle" },
+        { namn: "FAMAS", skada: 30, pris: 1950, rate: 11.12, kategori: "Rifle" },
+        { namn: "AUG", skada: 28, pris: 3300, rate: 10.00, kategori: "Rifle" },
+        { namn: "SG 553", skada: 30, pris: 3000, rate: 9.08, kategori: "Rifle" },
+
+        { namn: "AWP", skada: 115, pris: 4750, rate: 0.68, kategori: "Sniper" },
+        { namn: "SSG 08", skada: 88, pris: 1700, rate: 0.80, kategori: "Sniper" },
+        { namn: "SCAR-20", skada: 80, pris: 5000, rate: 4.00, kategori: "Sniper" },
+        { namn: "G3SG1", skada: 80, pris: 5000, rate: 4.00, kategori: "Sniper" },
+
+        { namn: "MP9", skada: 26, pris: 1250, rate: 14.28, kategori: "SMG" },
+        { namn: "MAC-10", skada: 29, pris: 1050, rate: 13.33, kategori: "SMG" },
+        { namn: "P90", skada: 26, pris: 2350, rate: 14.28, kategori: "SMG" },
+        { namn: "MP7", skada: 30, pris: 1400, rate: 12.50, kategori: "SMG" },
+        { namn: "MP5-SD", skada: 28, pris: 1400, rate: 12.50, kategori: "SMG" },
+        { namn: "PP-Bizon", skada: 27, pris: 1300, rate: 12.50, kategori: "SMG" },
+        { namn: "UMP-45", skada: 35, pris: 1200, rate: 11.12, kategori: "SMG" },
+
+        { namn: "Desert Eagle", skada: 53, pris: 700, rate: 4.45, kategori: "Pistol" },
+        { namn: "R8 Revolver", skada: 86, pris: 600, rate: 2.00, kategori: "Pistol" },
+        { namn: "CZ75-Auto", skada: 31, pris: 500, rate: 10.00, kategori: "Pistol" },
+        { namn: "Five-SeveN", skada: 32, pris: 500, rate: 6.67, kategori: "Pistol" },
+        { namn: "Tec-9", skada: 33, pris: 500, rate: 8.33, kategori: "Pistol" },
+        { namn: "Dual Berettas", skada: 38, pris: 300, rate: 8.33, kategori: "Pistol" },
+        { namn: "P250", skada: 38, pris: 300, rate: 6.67, kategori: "Pistol" },
+        { namn: "Glock-18", skada: 30, pris: 200, rate: 6.67, kategori: "Pistol" },
+        { namn: "P2000", skada: 35, pris: 200, rate: 5.88, kategori: "Pistol" },
+        { namn: "USP-S", skada: 35, pris: 200, rate: 5.88, kategori: "Pistol" },
+
+        { namn: "Negev", skada: 35, pris: 1700, rate: 13.33, kategori: "LMG" },
+        { namn: "M249", skada: 32, pris: 5200, rate: 12.50, kategori: "LMG" },
+
+        { namn: "Nova", skada: 26, pris: 1050, rate: 1.13, kategori: "Shotgun" },
+        { namn: "XM1014", skada: 20, pris: 2000, rate: 2.85, kategori: "Shotgun" },
+        { namn: "MAG-7", skada: 30, pris: 1300, rate: 1.18, kategori: "Shotgun" },
+        { namn: "Sawed-Off", skada: 32, pris: 1100, rate: 1.18, kategori: "Shotgun" }
+      ],
+
+      valorant: [
+        { namn: "Classic", skada: 26, pris: 0, rate: 6.75, kategori: "Pistol" },
+        { namn: "Shorty", skada: 12, pris: 300, rate: 3.33, kategori: "Shotgun" },
+        { namn: "Frenzy", skada: 26, pris: 450, rate: 10.00, kategori: "Pistol" },
+        { namn: "Ghost", skada: 30, pris: 500, rate: 6.75, kategori: "Pistol" },
+        { namn: "Sheriff", skada: 55, pris: 800, rate: 4.00, kategori: "Pistol" },
+
+        { namn: "Stinger", skada: 27, pris: 1100, rate: 16.00, kategori: "SMG" },
+        { namn: "Spectre", skada: 26, pris: 1600, rate: 13.33, kategori: "SMG" },
+
+        { namn: "Bucky", skada: 20, pris: 850, rate: 1.10, kategori: "Shotgun" },
+        { namn: "Judge", skada: 17, pris: 1850, rate: 3.50, kategori: "Shotgun" },
+
+        { namn: "Bulldog", skada: 35, pris: 2050, rate: 10.00, kategori: "Rifle" },
+        { namn: "Guardian", skada: 65, pris: 2250, rate: 5.25, kategori: "Rifle" },
+        { namn: "Phantom", skada: 39, pris: 2900, rate: 11.00, kategori: "Rifle" },
+        { namn: "Vandal", skada: 40, pris: 2900, rate: 9.75, kategori: "Rifle" },
+
+        { namn: "Marshal", skada: 101, pris: 950, rate: 1.50, kategori: "Sniper" },
+        { namn: "Outlaw", skada: 140, pris: 2400, rate: 2.75, kategori: "Sniper" },
+        { namn: "Operator", skada: 150, pris: 4700, rate: 0.60, kategori: "Sniper" },
+
+        { namn: "Ares", skada: 30, pris: 1600, rate: 13.00, kategori: "LMG" },
+        { namn: "Odin", skada: 38, pris: 3200, rate: 12.00, kategori: "LMG" }
+      ],
+
+      fortnite: [
+        { namn: "Assault Rifle", skada: 36, pris: 1, rate: 5.5, kategori: "Rifle" },
+        { namn: "Ranger Assault Rifle", skada: 43, pris: 1, rate: 3.9, kategori: "Rifle" },
+        { namn: "Drum Gun", skada: 24, pris: 1, rate: 8.1, kategori: "Rifle" },
+        { namn: "Minigun", skada: 21, pris: 1, rate: 12.0, kategori: "LMG" },
+        { namn: "Tactical Pistol", skada: 30, pris: 1, rate: 6.9, kategori: "Pistol" },
+        { namn: "Dual Pistols", skada: 46, pris: 1, rate: 4.0, kategori: "Pistol" },
+        { namn: "Midas' Masterpiece", skada: 125, pris: 1, rate: 1.0, kategori: "Pistol" },
+        { namn: "Pump Shotgun", skada: 128, pris: 1, rate: 0.7, kategori: "Shotgun" },
+        { namn: "8-Bit Shotgun", skada: 112, pris: 1, rate: 1.5, kategori: "Shotgun" },
+        { namn: "Oni Shotgun", skada: 118, pris: 1, rate: 1.5, kategori: "Shotgun" }
+      ],
+
+      apex: [
+        { namn: "R-301 Carbine", skada: 14, pris: 1, rate: 13.50, kategori: "Rifle" },
+        { namn: "VK-47 Flatline", skada: 18, pris: 1, rate: 10.00, kategori: "Rifle" },
+        { namn: "Hemlok Burst AR", skada: 21, pris: 1, rate: 10.67, kategori: "Rifle" },
+        { namn: "HAVOC Rifle", skada: 20, pris: 1, rate: 11.20, kategori: "Rifle" },
+        { namn: "Nemesis Burst AR", skada: 16, pris: 1, rate: 11.10, kategori: "Rifle" },
+
+        { namn: "Alternator SMG", skada: 18, pris: 1, rate: 10.00, kategori: "SMG" },
+        { namn: "R-99 SMG", skada: 12, pris: 1, rate: 18.00, kategori: "SMG" },
+        { namn: "C.A.R. SMG", skada: 13, pris: 1, rate: 15.50, kategori: "SMG" },
+        { namn: "Volt SMG", skada: 15, pris: 1, rate: 12.00, kategori: "SMG" },
+
+        { namn: "Spitfire", skada: 19, pris: 1, rate: 9.00, kategori: "LMG" },
+        { namn: "Devotion LMG", skada: 16, pris: 1, rate: 15.00, kategori: "LMG" },
+        { namn: "L-STAR EMG", skada: 18, pris: 1, rate: 10.00, kategori: "LMG" },
+        { namn: "Rampage LMG", skada: 26, pris: 1, rate: 5.00, kategori: "LMG" },
+
+        { namn: "G7 Scout", skada: 33, pris: 1, rate: 4.00, kategori: "Marksman" },
+        { namn: "Triple Take", skada: 63, pris: 1, rate: 1.30, kategori: "Marksman" },
+        { namn: "Bocek Compound Bow", skada: 60, pris: 1, rate: 1.50, kategori: "Marksman" },
+        { namn: "30-30 Repeater", skada: 51, pris: 1, rate: 2.30, kategori: "Marksman" },
+
+        { namn: "Wingman", skada: 45, pris: 1, rate: 2.60, kategori: "Pistol" },
+        { namn: "RE-45 Auto", skada: 16, pris: 1, rate: 13.00, kategori: "Pistol" },
+        { namn: "P2020", skada: 24, pris: 1, rate: 7.00, kategori: "Pistol" },
+
+        { namn: "EVA-8 Auto", skada: 54, pris: 1, rate: 2.00, kategori: "Shotgun" },
+        { namn: "Mastiff", skada: 88, pris: 1, rate: 1.10, kategori: "Shotgun" },
+        { namn: "Mozambique", skada: 45, pris: 1, rate: 2.20, kategori: "Shotgun" },
+        { namn: "Peacekeeper", skada: 99, pris: 1, rate: 0.90, kategori: "Shotgun" },
+
+        { namn: "Longbow DMR", skada: 60, pris: 1, rate: 1.30, kategori: "Sniper" },
+        { namn: "Sentinel", skada: 70, pris: 1, rate: 0.50, kategori: "Sniper" },
+        { namn: "Charge Rifle", skada: 75, pris: 1, rate: 0.40, kategori: "Sniper" },
+        { namn: "Kraber .50-Cal", skada: 150, pris: 1, rate: 0.36, kategori: "Sniper" }
+      ],
+
+      r6siege: [
+        { namn: "M762", skada: 45, pris: 1, rate: 12.17, kategori: "Rifle" },
+        { namn: "AK-12", skada: 40, pris: 1, rate: 14.17, kategori: "Rifle" },
+        { namn: "C8-SFW", skada: 40, pris: 1, rate: 13.95, kategori: "Rifle" },
+        { namn: "R4-C", skada: 39, pris: 1, rate: 14.33, kategori: "Rifle" },
+        { namn: "416-C Carbine", skada: 38, pris: 1, rate: 12.33, kategori: "Rifle" },
+        { namn: "552 Commando", skada: 43, pris: 1, rate: 11.50, kategori: "Rifle" },
+        { namn: "F2", skada: 37, pris: 1, rate: 16.33, kategori: "Rifle" },
+        { namn: "L85A2", skada: 47, pris: 1, rate: 11.17, kategori: "Rifle" },
+        { namn: "SC3000K", skada: 45, pris: 1, rate: 13.33, kategori: "Rifle" },
+        { namn: "C7E", skada: 42, pris: 1, rate: 13.33, kategori: "Rifle" },
+
+        { namn: "UMP45", skada: 42, pris: 1, rate: 10.00, kategori: "SMG" },
+        { namn: "MP5", skada: 27, pris: 1, rate: 13.33, kategori: "SMG" },
+        { namn: "MP7", skada: 32, pris: 1, rate: 15.00, kategori: "SMG" },
+        { namn: "P90", skada: 22, pris: 1, rate: 16.17, kategori: "SMG" },
+        { namn: "MP5SD", skada: 30, pris: 1, rate: 13.33, kategori: "SMG" },
+        { namn: "Vector .45 ACP", skada: 23, pris: 1, rate: 20.00, kategori: "SMG" },
+
+        { namn: "G8A1", skada: 37, pris: 1, rate: 14.17, kategori: "LMG" },
+        { namn: "M249", skada: 48, pris: 1, rate: 10.83, kategori: "LMG" },
+        { namn: "ALDA 5.56", skada: 35, pris: 1, rate: 15.00, kategori: "LMG" },
+        { namn: "DP27", skada: 49, pris: 1, rate: 9.17, kategori: "LMG" },
+
+        { namn: "CAMRS", skada: 69, pris: 1, rate: 7.37, kategori: "Marksman" },
+        { namn: "SR-25", skada: 61, pris: 1, rate: 7.32, kategori: "Marksman" },
+        { namn: "417", skada: 69, pris: 1, rate: 7.40, kategori: "Marksman" },
+        { namn: "Mk 14 EBR", skada: 56, pris: 1, rate: 7.62, kategori: "Marksman" },
+
+        { namn: "CSRX 300", skada: 135, pris: 1, rate: 0.92, kategori: "Sniper" },
+
+        { namn: "P226 MK 25", skada: 50, pris: 1, rate: 8.10, kategori: "Pistol" },
+        { namn: "D-50", skada: 71, pris: 1, rate: 8.23, kategori: "Pistol" },
+        { namn: "LUISON", skada: 65, pris: 1, rate: 7.27, kategori: "Pistol" },
+
+        { namn: "SuperNova", skada: 48, pris: 1, rate: 1.42, kategori: "Shotgun" },
+        { namn: "M870", skada: 42, pris: 1, rate: 1.67, kategori: "Shotgun" },
+        { namn: "SASG-12", skada: 26, pris: 1, rate: 5.72, kategori: "Shotgun" },
+        { namn: "FO-12", skada: 26, pris: 1, rate: 6.60, kategori: "Shotgun" }
+      ],
+
+      bf4: [
+        { namn: "AEK-971", skada: 24.5, pris: 1, rate: 15.00, kategori: "Rifle" },
+        { namn: "ACE 23", skada: 24.5, pris: 1, rate: 12.83, kategori: "Rifle" },
+        { namn: "M416", skada: 24.5, pris: 1, rate: 12.50, kategori: "Rifle" },
+        { namn: "AK-12", skada: 24.5, pris: 1, rate: 10.83, kategori: "Rifle" },
+        { namn: "SCAR-H", skada: 33.0, pris: 1, rate: 10.33, kategori: "Rifle" },
+
+        { namn: "ACW-R", skada: 24.5, pris: 1, rate: 14.67, kategori: "Carbine" },
+        { namn: "ACE 21 CQB", skada: 24.5, pris: 1, rate: 12.83, kategori: "Carbine" },
+        { namn: "AK 5C", skada: 24.5, pris: 1, rate: 11.67, kategori: "Carbine" },
+        { namn: "SG553", skada: 24.5, pris: 1, rate: 13.83, kategori: "Carbine" },
+
+        { namn: "PDW-R", skada: 24.5, pris: 1, rate: 12.50, kategori: "SMG" },
+        { namn: "CZ-3A1", skada: 24.5, pris: 1, rate: 16.67, kategori: "SMG" },
+        { namn: "MP7", skada: 24.5, pris: 1, rate: 15.83, kategori: "SMG" },
+        { namn: "UMP-45", skada: 34.0, pris: 1, rate: 9.83, kategori: "SMG" },
+
+        { namn: "M249", skada: 24.5, pris: 1, rate: 13.33, kategori: "LMG" },
+        { namn: "MG4", skada: 24.5, pris: 1, rate: 13.33, kategori: "LMG" },
+
+        { namn: "M40A5", skada: 100, pris: 1, rate: 0.90, kategori: "Sniper" },
+        { namn: "CS-LR4", skada: 100, pris: 1, rate: 0.72, kategori: "Sniper" },
+        { namn: "JNG-90", skada: 100, pris: 1, rate: 0.77, kategori: "Sniper" },
+
+        { namn: "M9", skada: 27, pris: 1, rate: 7.60, kategori: "Pistol" },
+        { namn: "P226", skada: 27, pris: 1, rate: 7.60, kategori: "Pistol" },
+        { namn: "G18", skada: 22, pris: 1, rate: 15.00, kategori: "Pistol" }
+      ],
+
+      bf6: [
+        { namn: "M433", skada: 26, pris: 1, rate: 13.83, kategori: "Rifle" },
+        { namn: "B36A4", skada: 26, pris: 1, rate: 12.00, kategori: "Rifle" },
+        { namn: "SOR-556 MK2", skada: 26, pris: 1, rate: 9.47, kategori: "Rifle" },
+        { namn: "AK4D", skada: 35, pris: 1, rate: 8.57, kategori: "Rifle" },
+        { namn: "TR-7", skada: 35, pris: 1, rate: 12.00, kategori: "Rifle" },
+
+        { namn: "M4A1", skada: 26, pris: 1, rate: 15.00, kategori: "Carbine" },
+        { namn: "M277", skada: 26, pris: 1, rate: 12.00, kategori: "Carbine" },
+        { namn: "AK-205", skada: 20, pris: 1, rate: 12.00, kategori: "Carbine" },
+        { namn: "M417 A2", skada: 35, pris: 1, rate: 10.90, kategori: "Carbine" },
+
+        { namn: "SGX", skada: 26, pris: 1, rate: 13.83, kategori: "SMG" },
+        { namn: "PW5A3", skada: 26, pris: 1, rate: 12.85, kategori: "SMG" },
+        { namn: "PW7A2", skada: 17, pris: 1, rate: 15.78, kategori: "SMG" },
+        { namn: "UMG-40", skada: 26, pris: 1, rate: 10.58, kategori: "SMG" },
+
+        { namn: "L110", skada: 26, pris: 1, rate: 12.00, kategori: "LMG" },
+        { namn: "DRS-IAR", skada: 26, pris: 1, rate: 12.85, kategori: "LMG" },
+        { namn: "M/60", skada: 35, pris: 1, rate: 8.57, kategori: "LMG" },
+
+        { namn: "M39 EMR", skada: 41, pris: 1, rate: 4.28, kategori: "Marksman" },
+        { namn: "LMR27", skada: 29, pris: 1, rate: 7.50, kategori: "Marksman" },
+        { namn: "SVK-8.6", skada: 66, pris: 1, rate: 2.50, kategori: "Marksman" },
+
+        { namn: "M2010 ESR", skada: 100, pris: 1, rate: 0.72, kategori: "Sniper" },
+        { namn: "SV-98", skada: 100, pris: 1, rate: 0.63, kategori: "Sniper" },
+        { namn: "PSR", skada: 100, pris: 1, rate: 0.63, kategori: "Sniper" },
+
+        { namn: "M87A1", skada: 134, pris: 1, rate: 1.57, kategori: "Shotgun" },
+        { namn: "M1014", skada: 115, pris: 1, rate: 3.33, kategori: "Shotgun" },
+
+        { namn: "P18", skada: 25, pris: 1, rate: 6.67, kategori: "Pistol" },
+        { namn: "M45A1", skada: 33, pris: 1, rate: 5.45, kategori: "Pistol" },
+        { namn: "M44", skada: 66, pris: 1, rate: 2.72, kategori: "Pistol" }
+      ]
+    };
+
+
+    function sorteraVapen() {
+      vapenLista.sort(function(a, b) {
+
+        if (a.pris === 0 && b.pris > 1) return 1;
+        if (b.pris === 0 && a.pris > 1) return -1;
+
+        if (a.pris === 1 && b.pris === 1) {
+          return b.dps - a.dps;
+        }
+
+        if (a.pris > 1 && b.pris > 1) {
+          return b.skadaPerKrona - a.skadaPerKrona;
+        }
+
+        if (a.pris === 0 && b.pris === 0) {
+          return b.dps - a.dps;
+        }
+
+        return 0;
+      });
+    }
+
+
+    function laddaSpelData() {
+
+      var valtSpel = document.getElementById("spelval").value;
+
+      if (!valtSpel || !spelData[valtSpel]) {
+        return;
+      }
+
+      vapenLista = [];
+
+      spelData[valtSpel].forEach(function(vapen) {
+
+        vapenLista.push({
+          namn: vapen.namn,
+          skada: vapen.skada,
+          range: vapen.range || null,
+          pris: vapen.pris,
+          rate: vapen.rate,
+          kategori: vapen.kategori,
+          attachment: "none",
+          skadaPerKrona:
+            vapen.pris > 1
+              ? vapen.skada / vapen.pris
+              : 0,
+          dps: vapen.skada * vapen.rate
+        });
+
+      });
+
+      sorteraVapen();
+      sparaData();
+      ritaVapen();
+      
+    }
+
+
+    function sparaData() {
+      localStorage.setItem(
+        "vapenLista",
+        JSON.stringify(vapenLista)
+      );
+    }
+
+
+    if (localStorage.getItem("vapenLista")) {
+
+      try {
+
+        vapenLista =
+          JSON.parse(localStorage.getItem("vapenLista")) || [];
+
+        vapenLista.forEach(function(vapen) {
+
+          if (typeof vapen.dps !== "number") {
+            vapen.dps = Number(vapen.skada || 0) * Number(vapen.rate || 0);
+          }
+
+          if (typeof vapen.skadaPerKrona !== "number") {
+            vapen.skadaPerKrona =
+              vapen.pris > 1
+                ? vapen.skada / vapen.pris
+                : 0;
+          }
+
+          if (!vapen.attachment) {
+            vapen.attachment = "none";
+          }
+
+        });
+
+        sorteraVapen();
+
+      } catch (error) {
+
+        vapenLista = [];
+        localStorage.removeItem("vapenLista");
+
+      }
+    }
+
+
+    document
+      .querySelector("form")
+      .addEventListener("submit", function() {
+
+        var namn =
+          document.getElementById("namn").value.trim();
+
+        namn =
+          namn
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+
+        var skada =
+          Number(document.getElementById("skada").value);
+
+        var range =
+          Number(document.getElementById("range").value);
+
+        var prisText =
+          document.getElementById("pris").value;
+
+        var pris =
+          prisText.trim() === ""
+            ? 1
+            : Number(prisText);
+
+        var eldhastighet =
+          Number(
+            document.getElementById("eldhastighet").value
+          );
+
+        var kategori =
+          document.getElementById("kategorival").value;
+
+        var attachment =
+          document.getElementById("attachmentval").value;
+
+
+        if (
+          namn === "" ||
+          !Number.isFinite(skada) ||
+          skada <= 0 ||
+          !Number.isFinite(eldhastighet) ||
+          eldhastighet <= 0
+        ) {
+
+          visaVarning(
+            "Enter a weapon name, damage and fire rate."
+          );
+
+          return;
+        }
+
+
+        if (!Number.isFinite(pris) || pris < 0) {
+
+          visaVarning(
+            "Price must be zero or higher."
+          );
+
+          return;
+        }
+
+
+        if (!Number.isFinite(range) || range < 0) {
+          range = 0;
+        }
+
+
+        if (attachment === "silencer") {
+
+          var valtSpel =
+            document.getElementById("spelval").value;
+
+          var suppressor =
+            suppressorData[valtSpel];
+
+          if (suppressor) {
+
+            if (suppressor.available === false) {
+
+              visaVarning(
+                "Suppressor is not available in the selected game."
+              );
+
+              return;
+            }
+
+            skada =
+              skada * suppressor.damageMultiplier;
+
+            range =
+              range * suppressor.rangeMultiplier;
+
+          }
+
+        }
+
+
+        var skadaPerKrona =
+          pris > 1
+            ? skada / pris
+            : 0;
+
+        var dps =
+          skada * eldhastighet;
+
+
+        vapenLista.push({
+          namn: namn,
+          skada: skada,
+          range: range,
+          pris: pris,
+          rate: eldhastighet,
+          kategori: kategori,
+          attachment: attachment,
+          skadaPerKrona: skadaPerKrona,
+          dps: dps
+        });
+
+
+        sorteraVapen();
+        sparaData();
+        ritaVapen();
+       
+
+        document.getElementById("namn").value = "";
+        document.getElementById("skada").value = "";
+        document.getElementById("range").value = "";
+        document.getElementById("pris").value = "";
+        document.getElementById("eldhastighet").value = "";
+        document.getElementById("attachmentval").value = "none";
+
+      });
+
+
+    function visaVarning(text) {
+
+      var ruta =
+        document.getElementById("varningsruta");
+
+      ruta.textContent = text;
+      ruta.style.display = "block";
+      ruta.classList.add("visa");
+
+      setTimeout(function() {
+        ruta.style.display = "none";
+      }, 3000);
+    }
+
+
+    function taBortVapen(index) {
+
+      vapenLista.splice(index, 1);
+
+      sparaData();
+      ritaVapen();
+    }
+
+
+    function hamtaSuppressorText() {
+
+      var valtSpel =
+        document.getElementById("spelval").value;
+
+      var data =
+        suppressorData[valtSpel];
+
+      if (!data) {
+        return "Game-specific suppressor data unavailable";
+      }
+
+      if (data.available === false) {
+        return "Suppressor not available in this game";
+      }
+
+      var effekter = [];
+
+      if (data.builtIn) {
+        effekter.push("Built-in suppressor");
+      }
+
+      if (data.reducesSound) {
+        effekter.push("Reduced sound");
+      }
+
+      if (data.reducesMuzzleFlash) {
+        effekter.push("Reduced muzzle flash");
+      }
+
+      if (data.hidesTracers) {
+        effekter.push("Hidden tracers");
+      }
+
+      if (data.hidesFromMinimap) {
+        effekter.push("Hidden from minimap");
+      }
+
+      if (data.affectsAccuracy) {
+        effekter.push("Accuracy affected");
+      }
+
+      if (data.affectsRecoil) {
+        effekter.push("Recoil affected");
+      }
+
+      if (data.noRecoilMitigation) {
+        effekter.push("No recoil mitigation");
+      }
+
+      if (data.reducesBulletVelocity) {
+        effekter.push("Reduced bullet velocity");
+      }
+
+      if (data.reducesHipfireAccuracy) {
+        effekter.push("Reduced hip-fire accuracy");
+      }
+
+      if (data.informationDenial) {
+        effekter.push("Information denial");
+      }
+
+      if (data.multipleSuppressorTypes) {
+        effekter.push("Multiple suppressor types");
+      }
+
+      if (effekter.length === 0) {
+        return "No additional suppressor effects stored";
+      }
+
+      return effekter.join(" • ");
+    }
+
+
+    function ritaVapen() {
+
+      var container =
+        document.getElementById("vapenLista_container");
+
+      container.innerHTML = "";
+
+
+      if (vapenLista.length === 0) {
+
+        container.innerHTML =
+          '<div style="' +
+          'text-align:center;' +
+          'color:#a89cc8;' +
+          'padding:25px;' +
+          'border:1px dashed #3d3557;' +
+          'border-radius:10px;' +
+          '">' +
+          'No weapons loaded.' +
+          '</div>';
+
+        return;
+      }
+
+
+      vapenLista.forEach(function(vapen, i) {
+
+        var kort =
+          document.createElement("div");
+
+        kort.className =
+          "vapenkort" +
+          (i === 0 ? " basta" : "");
+
+        kort.setAttribute(
+          "data-kategori",
+          vapen.kategori || "Rifle"
+        );
+
+
+        var harPris =
+          vapen.pris !== 1;
+
+
+        var suppressorText =
+          vapen.attachment === "silencer"
+            ? hamtaSuppressorText()
+            : "";
+
+
+        kort.innerHTML =
+
+          '<input type="checkbox" class="jamforKryss" value="' + i + '">' +
+
+         '<div class="namn">' +
+vapen.namn +
+
+(
+  vapen.attachment === "silencer"
+    ? ' <span style="font-size:11px; color:#a89cc8;">[Silencer]</span>'
+    : ''
+) +
+
+(
+  i === 0
+    ? ' <span class="krona">&#9813; ' +
+      (harPris ? 'BEST VALUE' : 'BEST DPS') +
+      '</span>'
+    : ''
+) +
+
+'</div>' +
+
+          
+
+          '<div class="stat">' +
+          'Damage<br><b>' +
+          Number(vapen.skada).toFixed(
+            Number(vapen.skada) % 1 === 0 ? 0 : 1
+          ) +
+          '</b></div>' +
+
+          '<div class="stat">' +
+          'Range<br><b>' +
+          (
+            vapen.range
+              ? vapen.range
+              : "N/A"
+          ) +
+          '</b></div>' +
+
+          (
+            harPris
+
+              ? '<div class="stat">' +
+                'Price<br><b>' +
+                (
+                  vapen.pris === 0
+                    ? 'FREE'
+                    : vapen.pris
+                ) +
+                '</b></div>'
+
+              : '<div class="stat"></div>'
+          ) +
+
+          '<div class="stat">' +
+          'Shots/sec<br><b>' +
+          vapen.rate +
+          '</b></div>' +
+
+          '<div class="stat">' +
+          'DPS<br><b>' +
+          Math.round(vapen.dps) +
+          '</b></div>' +
+
+          (
+            harPris
+
+              ? '<div class="ratio">' +
+                (
+                  vapen.pris === 0
+                    ? 'FREE'
+                    : vapen.skadaPerKrona.toFixed(2)
+                ) +
+                '<br>' +
+                '<span style="' +
+                'font-size:11px;' +
+                'color:#a89cc8;' +
+                'font-weight:400;' +
+                '">' +
+                'dmg/cost' +
+                '</span>' +
+                '</div>'
+
+              : '<div class="ratio">' +
+                Math.round(vapen.dps) +
+                '<br>' +
+                '<span style="' +
+                'font-size:11px;' +
+                'color:#a89cc8;' +
+                'font-weight:400;' +
+                '">' +
+                'DPS-rank' +
+                '</span>' +
+                '</div>'
+          ) +
+
+          '<button class="ta-bort-btn" data-index="' +
+          i +
+          '">' +
+          'Remove' +
+          '</button>';
+
+
+        kort
+          .querySelector(".ta-bort-btn")
+          .addEventListener(
+            "click",
+            function() {
+              taBortVapen(i);
+            }
+          );
+
+
+        container.appendChild(kort);
+      });
+
+
+      filtreraVapen();
+    }
+
+
+    function filtreraVapen() {
+
+      var sok =
+        document
+          .getElementById("sokfalt")
+          .value
+          .toLowerCase();
+
+      var kategori =
+        document
+          .getElementById("kategorifilter")
+          .value;
+
+      var kort =
+        document.querySelectorAll(".vapenkort");
+
+
+      kort.forEach(function(element) {
+
+        var namn =
+          element
+            .querySelector(".namn")
+            .textContent
+            .toLowerCase();
+
+        var kortKategori =
+          element.getAttribute("data-kategori");
+
+
+        var matcharSok =
+          namn.includes(sok);
+
+        var matcharKategori =
+          kategori === "alla" ||
+          kategori === kortKategori;
+
+
+        element.style.display =
+          matcharSok && matcharKategori
+            ? "grid"
+            : "none";
+      });
+    }
+
+
+    function jamforValda() {
+
+      var valda =
+        Array.from(
+          document.querySelectorAll(
+            ".jamforKryss:checked"
+          )
+        );
+
+
+      if (valda.length < 2) {
+
+        visaVarning(
+          "Select at least two weapons to compare."
+        );
+
+        return;
+      }
+
+
+      var index =
+        valda.map(function(kryss) {
+          return Number(kryss.value);
+        });
+
+
+      var vapen =
+        index
+          .map(function(i) {
+            return vapenLista[i];
+          })
+          .filter(Boolean);
+
+
+      visaJamforelse(vapen);
+    }
+
+
+    function visaJamforelse(vapen) {
+
+      var diagram =
+        document.getElementById("diagram");
+
+      if (!vapen || vapen.length < 2) {
+        diagram.innerHTML = "";
+        return;
+      }
+
+
+      var hogstDps =
+        Math.max.apply(
+          null,
+          vapen.map(function(v) {
+            return v.dps;
+          })
+        );
+
+
+      var hogstDamage =
+        Math.max.apply(
+          null,
+          vapen.map(function(v) {
+            return v.skada;
+          })
+        );
+
+
+      var html =
+        '<div class="compare-box">' +
+
+        '<div class="compare-title">' +
+        'Weapon Comparison' +
+        '</div>' +
+
+        '<table class="compare-table">' +
+
+        '<thead><tr>' +
+
+        '<th>Stat</th>';
+
+
+      vapen.forEach(function(v) {
+        html += '<th>' + v.namn + '</th>';
+      });
+
+
+      html +=
+        '</tr></thead><tbody>';
+
+
+      html +=
+        '<tr><td>Damage</td>';
+
+      vapen.forEach(function(v) {
+
+        html +=
+          '<td class="' +
+          (
+            v.skada === hogstDamage
+              ? 'compare-winner'
+              : ''
+          ) +
+          '">' +
+          v.skada +
+          '</td>';
+
+      });
+
+      html += '</tr>';
+
+
+      html +=
+        '<tr><td>DPS</td>';
+
+      vapen.forEach(function(v) {
+
+        html +=
+          '<td class="' +
+          (
+            v.dps === hogstDps
+              ? 'compare-winner'
+              : ''
+          ) +
+          '">' +
+          Math.round(v.dps) +
+          '</td>';
+
+      });
+
+      html += '</tr>';
+
+
+      html +=
+        '<tr><td>Fire rate</td>';
+
+      vapen.forEach(function(v) {
+        html +=
+          '<td>' +
+          v.rate +
+          '</td>';
+      });
+
+      html += '</tr>';
+
+
+      html +=
+        '<tr><td>Range</td>';
+
+      vapen.forEach(function(v) {
+        html +=
+          '<td>' +
+          (
+            v.range
+              ? v.range
+              : 'N/A'
+          ) +
+          '</td>';
+      });
+
+      html += '</tr>';
+
+
+      html +=
+        '<tr><td>Attachment</td>';
+
+      vapen.forEach(function(v) {
+        html +=
+          '<td>' +
+          (
+            v.attachment === "silencer"
+              ? "Silencer"
+              : "None"
+          ) +
+          '</td>';
+      });
+
+      html += '</tr>';
+
+
+      html +=
+        '</tbody></table>';
+
+var playstyle =
+  document.getElementById("playstyle").value;
+
+var vinnare =
+  vapen
+    .slice()
+    .sort(function(a, b) {
+      return (
+        hamtaAIScore(b, playstyle) -
+        hamtaAIScore(a, playstyle)
+      );
+    })[0];
+
+
+      html +=
+
+        '<div class="value-verdict">' +
+
+        '<div class="value-verdict-title">' +
+        'WEAPONIZER VERDICT' +
+        '</div>' +
+
+'<div class="value-verdict-text">' +
+vinnare.namn +
+(
+  playstyle === "aggressive"
+    ? ' is the strongest choice for an aggressive playstyle, with a strong balance of DPS, fire rate and damage.'
+    : playstyle === "defensive"
+    ? ' is the strongest defensive choice based on damage, DPS and range.'
+    : playstyle === "close"
+    ? ' is the strongest close-range choice because of its DPS and fire rate.'
+    : playstyle === "long"
+    ? ' is the strongest long-range choice based on damage and range.'
+    : ' offers the strongest overall balance in this comparison.'
+) +
+'</div>' +
+
+        '</div>' +
+
+        '</div>';
+
+
+      diagram.innerHTML = html;
+    }
+
+
+    
+
+
+    function hamtaAIScore(vapen, playstyle) {
+
+      var dps =
+        Number(vapen.dps) || 0;
+
+      var damage =
+        Number(vapen.skada) || 0;
+
+      var rate =
+        Number(vapen.rate) || 0;
+
+      var range =
+        Number(vapen.range) || 0;
+
+
+      if (playstyle === "aggressive") {
+
+        return (
+          dps * 1.3 +
+          rate * 8 +
+          damage * 0.3
+        );
+      }
+
+
+      if (playstyle === "defensive") {
+
+        return (
+          damage * 1.1 +
+          dps * 0.7 +
+          range * 0.4
+        );
+      }
+
+
+      if (playstyle === "close") {
+
+        return (
+          dps * 1.2 +
+          rate * 10
+        );
+      }
+
+
+      if (playstyle === "long") {
+
+        return (
+          damage * 1.2 +
+          range * 1.2
+        );
+      }
+
+
+      return (
+        dps +
+        damage * 0.5 +
+        range * 0.25
+      );
+    }
+
+
+    document
+      .getElementById("playstyle")
+      .addEventListener(
+        "change",
+        function() {
+        }
+      );
+
+
+    ritaVapen();
+
+var gameSelectButton = document.getElementById("gameSelectButton");
+var gameSelectMenu = document.getElementById("gameSelectMenu");
+var selectedGameText = document.getElementById("selectedGameText");
+var gameValue = document.getElementById("spelval");
+
+gameSelectButton.addEventListener("click", function() {
+  gameSelectMenu.classList.toggle("open");
+});
+
+gameSelectMenu.querySelectorAll("button").forEach(function(button) {
+  button.addEventListener("click", function() {
+    gameValue.value = button.getAttribute("data-value");
+    selectedGameText.textContent = button.textContent;
+    gameSelectMenu.classList.remove("open");
+    laddaSpelData();
+  });
+});
+
+document.addEventListener("click", function(event) {
+  if (!document.getElementById("gameSelect").contains(event.target)) {
+    gameSelectMenu.classList.remove("open");
+  }
+});
+
+
+  </script>
+
+</body>
+</html>
