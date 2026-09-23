@@ -49,6 +49,15 @@
 			object-position: center;
 		}
 
+		.site-section .track-grid {
+			max-height: clamp(24rem, 62vh, 34rem);
+			overflow-y: auto;
+		}
+
+		@media (max-width: 620px) {
+			.site-section .track-grid { max-height: 29rem; }
+		}
+
 		.site-footer {
 			border: 1px solid transparent;
 			background-color: #030304;
@@ -156,6 +165,28 @@
 					<div class="custom-audio-player">
 						<audio>
 							<source src="audio/Ni stod kvar RÄTT.mp3" type="audio/mpeg">
+						</audio>
+						<div class="player-main-controls">
+							<button class="player-play-btn" title="Play/Pause">▶</button>
+							<span class="player-time">0:00 / 0:00</span>
+							<span class="player-volume-icon">🔊</span>
+							<input type="range" class="player-volume-control" min="0" max="100" value="100">
+						</div>
+						<div class="player-progress-container">
+							<div class="player-progress-bar">
+								<div class="player-progress-fill"></div>
+								<input type="range" class="player-seekbar" min="0" max="100" value="0">
+							</div>
+						</div>
+					</div>
+				</article>
+				<article class="track-card" data-track-id="fast-du-ar-har">
+					<h3>Fast du är här</h3>
+					<div class="playlist-picker"><button type="button" class="premium-clickable-button playlist-toggle" data-track-id="fast-du-ar-har" aria-label="Add to playlist" aria-expanded="false">+</button><div class="playlist-picker-menu" hidden></div></div>
+					<div class="cover-frame"><img src="audio/Fast du är här.PNG" alt="Fast du är här" style="display:block; width:100%; height:160px; object-fit:cover; border-radius:0.7rem; border:1px solid rgba(212,168,66,.65); background:#050505;"></div>
+					<div class="custom-audio-player">
+						<audio>
+							<source src="audio/Fast du är här MP3.mp3" type="audio/mpeg">
 						</audio>
 						<div class="player-main-controls">
 							<button class="player-play-btn" title="Play/Pause">▶</button>

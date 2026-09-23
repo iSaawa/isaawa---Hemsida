@@ -70,7 +70,7 @@
 			display: flex !important;
 			flex-direction: column !important;
 			gap: .55rem !important;
-			max-height: clamp(22rem, 58vh, 31rem);
+			max-height: clamp(24rem, 62vh, 34rem);
 			margin: 1rem auto 0 !important;
 			padding: .35rem .5rem .35rem .35rem;
 			overflow-y: auto;
@@ -173,7 +173,7 @@
 		}
 
 		@media (max-width: 620px) {
-			.site-section .track-grid { max-height: 27rem; }
+			.site-section .track-grid { max-height: 29rem; }
 			.site-section .track-card { grid-template-columns: 3.1rem minmax(0, 1fr) auto !important; }
 			.site-section .track-card > .cover-frame,
 			.site-section .track-card > .production-note { width: 3.1rem !important; height: 3.1rem !important; }
@@ -290,6 +290,28 @@
 					<div class="custom-audio-player">
 						<audio>
 							<source src="audio/Ni stod kvar RÄTT.mp3" type="audio/mpeg">
+						</audio>
+						<div class="player-main-controls">
+							<button class="player-play-btn" title="Play/Pause">▶</button>
+							<span class="player-time">0:00 / 0:00</span>
+							<span class="player-volume-icon">🔊</span>
+							<input type="range" class="player-volume-control" min="0" max="100" value="100">
+						</div>
+						<div class="player-progress-container">
+							<div class="player-progress-bar">
+								<div class="player-progress-fill"></div>
+								<input type="range" class="player-seekbar" min="0" max="100" value="0">
+							</div>
+						</div>
+					</div>
+				</article>
+				<article class="track-card" data-track-id="fast-du-ar-har">
+					<h3>Fast du är här</h3>
+					<div class="playlist-picker"><button type="button" class="premium-clickable-button playlist-toggle" data-track-id="fast-du-ar-har" aria-label="Lägg till i spellista" aria-expanded="false">+</button><div class="playlist-picker-menu" hidden></div></div>
+					<div class="cover-frame"><img src="audio/Fast du är här.PNG" alt="Fast du är här" style="display:block; width:100%; height:160px; object-fit:cover; border-radius:0.7rem; border:1px solid rgba(212,168,66,.65); background:#050505;"></div>
+					<div class="custom-audio-player">
+						<audio>
+							<source src="audio/Fast du är här MP3.mp3" type="audio/mpeg">
 						</audio>
 						<div class="player-main-controls">
 							<button class="player-play-btn" title="Play/Pause">▶</button>
